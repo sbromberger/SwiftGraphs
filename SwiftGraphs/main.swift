@@ -1,4 +1,11 @@
+import Dispatch
 
+func timeIt(_ fn: () -> ()) -> UInt64 {
+    let start = DispatchTime.now()
+    fn()
+    let end = DispatchTime.now()
+    return (end.uptimeNanoseconds - start.uptimeNanoseconds)
+}
 
 var ba = BitArray(repeating: false, count: 10)
 ba[3] = true
@@ -16,8 +23,25 @@ print(g.colptr)
 print("neighbors of vertex 1: \(g.neighbors(of: 1))")
 print("vertices of g = \(Array(g.vertices))")
 print("edges of g = \(g.edges())")
-let bfs1 = g.BFS(from: 0)
-print("bfs from 0 = \(bfs1)")
+//let start = DispatchTime.now()
+//let h = Graph<UInt32>(fromFile: "/Users/bromberger1/dev/swift/SwiftGraphs/SwiftGraphs/data/edgecsv-10m-100m.csv")
+//let end = DispatchTime.now()
+//print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000.0) s")
+//let timeit = timeIt { _ = g.BFS(from: 0) }
+//
+//print("timeit = \(timeit / 1000) us")
+let start = DispatchTime.now()
+let h = Graph<UInt32>(fromVecFile: "/Users/bromberger1/dev/swift/SwiftGraphs/SwiftGraphs/data/indptrvecs-1m-10m.0based.txt")
+let end = DispatchTime.now()
+print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000.0) s")
+
+print(h)
+let start2 = DispatchTime.now()
+let bfs1 = h.BFS(from: 0)
+let end2 = DispatchTime.now()
+let timeit = end2.uptimeNanoseconds - start2.uptimeNanoseconds
+
+print("BFS from vertex 0 = \(Double(timeit) / 1_000_000_000) s; top 5 = \(bfs1[0..<5])")
 
 //let h = Graph<UInt32>(fromFile: "g1.csv")
 //print("ne = \(h.ne)")

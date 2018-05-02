@@ -42,7 +42,7 @@ public struct Graph<T: BinaryInteger> {
         colptr = f_ind
     }
 
-    public init(fromFile fileName: String) {
+    public init(fromCSV fileName: String) {
         let furl = URL(fileURLWithPath: fileName)
         var edges = [Edge<T>]()
         do {
@@ -61,6 +61,33 @@ public struct Graph<T: BinaryInteger> {
         self.init(fromEdgeList: edges)
     }
 
+    public init(fromVecFile fileName: String) {
+        var colptrRead = [Int]()
+        var rowindRead = [T]()
+        var inColPtr = true
+
+        guard let reader = LineReader(path: fileName) else {
+            fatalError("error opening file \(fileName)")
+        }
+        for var line in reader {
+            line.removeLast()
+            autoreleasepool {
+                if line.hasPrefix("-----") {
+                    inColPtr = false
+                } else {
+                    let n = Int(line)!
+                    if inColPtr {
+                        colptrRead.append(n)
+                    } else {
+                        rowindRead.append(T.init(n))
+                    }
+                }
+            }
+        }
+        rowidx = rowindRead
+        colptr = colptrRead
+    }
+    
     private func vecRange(_ s: Array<T>.Index) -> CountableRange<Array<T>.Index> {
         let rStart = colptr[s]
         let rEnd = colptr[s + 1]

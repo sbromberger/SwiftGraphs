@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B4257A9209A1E40008116FC /* LineReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4257A8209A1E40008116FC /* LineReader.swift */; };
 		5DEFB50D20997B2F00711BDC /* SwiftGraphsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEFB50C20997B2F00711BDC /* SwiftGraphsTests.swift */; };
 		5DEFB51220997BDD00711BDC /* BitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64C209975E400CD8CA6 /* BitArray.swift */; };
 		5DEFB51320997BDD00711BDC /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64A209975E400CD8CA6 /* Edge.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B4257A8209A1E40008116FC /* LineReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineReader.swift; sourceTree = "<group>"; };
 		5DEFB50A20997B2F00711BDC /* SwiftGraphsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftGraphsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEFB50C20997B2F00711BDC /* SwiftGraphsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftGraphsTests.swift; sourceTree = "<group>"; };
 		5DEFB50E20997B2F00711BDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				5DFDE643209975A500CD8CA6 /* main.swift */,
+				3B4257A8209A1E40008116FC /* LineReader.swift */,
 				5DFDE64C209975E400CD8CA6 /* BitArray.swift */,
 				5DFDE64A209975E400CD8CA6 /* Edge.swift */,
 				5DFDE64B209975E400CD8CA6 /* Graph.swift */,
@@ -196,6 +199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DFDE64E209975E400CD8CA6 /* Graph.swift in Sources */,
+				3B4257A9209A1E40008116FC /* LineReader.swift in Sources */,
 				5DFDE64D209975E400CD8CA6 /* Edge.swift in Sources */,
 				5DFDE644209975A500CD8CA6 /* main.swift in Sources */,
 				5DFDE64F209975E400CD8CA6 /* BitArray.swift in Sources */,
@@ -365,6 +369,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 			};
