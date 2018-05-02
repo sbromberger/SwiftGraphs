@@ -31,7 +31,7 @@ print("edges of g = \(g.edges())")
 //
 //print("timeit = \(timeit / 1000) us")
 let start = DispatchTime.now()
-let h = Graph<UInt32>(fromVecFile: "/Users/bromberger1/dev/swift/SwiftGraphs/SwiftGraphs/data/indptrvecs-1m-10m.0based.txt")
+let h = Graph<UInt32>(fromVecFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-1m-10m.0based.txt")
 let end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000.0) s")
 
