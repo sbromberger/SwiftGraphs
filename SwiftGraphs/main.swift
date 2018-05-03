@@ -30,18 +30,18 @@ print("edges of g = \(g.edges())")
 //let timeit = timeIt { _ = g.BFS(from: 0) }
 //
 //print("timeit = \(timeit / 1000) us")
-let start = DispatchTime.now()
-let h = Graph<UInt32>(fromVecFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-1m-10m.0based.txt")
-let end = DispatchTime.now()
-print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000.0) s")
+//let start = DispatchTime.now()
+//let h = Graph<UInt32>(fromVecFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-1m-10m.0based.txt")
+//let end = DispatchTime.now()
+//print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000.0) s")
+//
+//print(h)
+//let start2 = DispatchTime.now()
+//let bfs1 = h.BFS(from: 0)
+//let end2 = DispatchTime.now()
+//let timeit = end2.uptimeNanoseconds - start2.uptimeNanoseconds
 
-print(h)
-let start2 = DispatchTime.now()
-let bfs1 = h.BFS(from: 0)
-let end2 = DispatchTime.now()
-let timeit = end2.uptimeNanoseconds - start2.uptimeNanoseconds
-
-print("BFS from vertex 0 = \(Double(timeit) / 1_000_000_000) s; top 5 = \(bfs1[0..<5])")
+//print("BFS from vertex 0 = \(Double(timeit) / 1_000_000_000) s; top 5 = \(bfs1[0..<5])")
 
 //let h = Graph<UInt32>(fromFile: "g1.csv")
 //print("ne = \(h.ne)")
@@ -56,3 +56,26 @@ print("BFS from vertex 0 = \(Double(timeit) / 1_000_000_000) s; top 5 = \(bfs1[0
 //print("h has edge (1,4) = \(h.hasEdge(1, 4))")
 //
 // print("g.test = \(g.test)")
+
+import Foundation
+
+var arr1 = (1...5000).map{_ in arc4random()}
+var arr2 = arr1
+var arr3 = arr1
+var starta = DispatchTime.now()
+radixSort(&arr1)
+var enda = DispatchTime.now()
+print("radixSort time \(Double(enda.uptimeNanoseconds - starta.uptimeNanoseconds) / 1_000_000.0) ms")
+
+print("arr1 == arr2 = \(arr1 == arr2)")
+var startb = DispatchTime.now()
+arr2.sort()
+var endb = DispatchTime.now()
+print("sort() time \(Double(endb.uptimeNanoseconds - starta.uptimeNanoseconds) / 1_000_000.0) ms")
+print("arr1 == arr2 = \(arr1 == arr2)")
+print("arr1 == arr3 = \(arr1 == arr3)")
+startb = DispatchTime.now()
+arr3.radixSort()
+endb = DispatchTime.now()
+print("radixSort() time \(Double(endb.uptimeNanoseconds - starta.uptimeNanoseconds) / 1_000_000.0) ms")
+print("arr1 == arr3 = \(arr1 == arr3)")

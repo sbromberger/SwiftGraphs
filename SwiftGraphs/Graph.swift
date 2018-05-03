@@ -94,9 +94,9 @@ public struct Graph<T: BinaryInteger> {
         return rStart ..< rEnd
     }
 
-    public func neighbors(of vertex: T) -> [T] {
+    public func neighbors(of vertex: T) -> ArraySlice<T> {
         let range = vecRange(Array<T>.Index(vertex))
-        return Array(rowidx[range])
+        return rowidx[range]
     }
     public func edges() -> [Edge<T>] {
         var edgeList = [Edge<T>]()
@@ -154,26 +154,6 @@ public struct Graph<T: BinaryInteger> {
     }
 }
 
-extension Array where Element: Comparable {
-    func searchSortedIndex(val: Element) -> (Index, Bool) {
-        var (low, high) = (startIndex, endIndex)
-        while low != high {
-            let mid = index(low, offsetBy: distance(from: low, to: high) / 2)
-            if self[mid] < val {
-                low = index(after: mid)
-            } else {
-                high = mid
-            }
-        }
-        let found = low < endIndex ? self[low] == val : false
-        return (low, found)
-    }
-
-    mutating func insertSorted(val: Element) {
-        let (index, _) = searchSortedIndex(val: val)
-        insert(val, at: index)
-    }
-}
 
 extension Graph: CustomStringConvertible {
     public var description: String {
