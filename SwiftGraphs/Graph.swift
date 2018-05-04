@@ -124,15 +124,15 @@ public struct Graph<T: BinaryInteger> {
         let numVertices = Int(nv)
         let maxT = ~T()
         var visited = BitArray(repeating: false, count: numVertices)
-        var vertLevel = Array<T>(repeating: maxT, count: numVertices)
-        var nLevel = T(1)
+        var vertLevel = Array<Int>(repeating: maxT, count: Int(numVertices))
+        var nLevel = 1
         var curLevel = [T]()
         curLevel.reserveCapacity(numVertices)
         var nextLevel = [T]()
         nextLevel.reserveCapacity(numVertices)
         
         visited[Int(sourceVertex)] = true
-        vertLevel[Int(sourceVertex)] = T(0)
+        vertLevel[Int(sourceVertex)] = 0
         curLevel.append(sourceVertex)
         
         while !curLevel.isEmpty {
@@ -144,7 +144,7 @@ public struct Graph<T: BinaryInteger> {
                     }
                 }
             }
-            nLevel += T(1)
+            nLevel = nLevel &+ 1
             curLevel.removeAll(keepingCapacity: true)
             (curLevel, nextLevel) = (nextLevel, curLevel)
             curLevel.sort()
