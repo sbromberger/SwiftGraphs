@@ -138,10 +138,9 @@ public struct Graph<T: BinaryInteger> {
         while !curLevel.isEmpty {
             for vertex in curLevel {
                 for neighbor in neighbors(of: vertex) {
-                    if !visited[Int(neighbor)] {
+                    if !visited.unsafeTestAndSet(Int(neighbor)) {
                         nextLevel.append(neighbor)
                         vertLevel[Int(neighbor)] = nLevel
-                        visited[Int(neighbor)] = true
                     }
                 }
             }

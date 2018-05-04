@@ -22,7 +22,7 @@ extension ArraySlice where Element: Comparable {
     }
 }
 
-extension Array where Element: Comparable {
+extension RandomAccessCollection where Self: RangeReplaceableCollection, Element: Comparable {
     public func searchSortedIndex(val: Element) -> (Index, Bool) {
         var (low, high) = (startIndex, endIndex)
         while low != high {

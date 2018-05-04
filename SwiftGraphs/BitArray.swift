@@ -240,6 +240,19 @@ extension BitArray: MutableCollection {
             setValue(newValue, atIndex: index)
         }
     }
+    
+    public mutating func unsafeTestAndSet(_ logicalIndex: Int) -> Bool {
+        let indexPath = realIndexPath(logicalIndex)
+        let mask = 1 << indexPath.bitIndex
+        let oldValue = mask & bits[indexPath.arrayIndex] != 0
+        
+        if !oldValue {
+           cardinality += 1
+        }
+        bits[indexPath.arrayIndex] |= mask
+        return oldValue
+    }
+    
 }
 
 extension BitArray: ExpressibleByArrayLiteral {
