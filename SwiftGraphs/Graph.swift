@@ -17,7 +17,7 @@ public struct Graph<T: BinaryInteger> {
         let reversedEdgeList = orderedEdgeList.map { $0.reverse }
         let allEdges = (orderedEdgeList + reversedEdgeList).sorted()
 
-        var numVertices = T(0)
+        var numVertices:T = 0
         var srcs = [T]()
         var dsts = [T]()
         srcs.reserveCapacity(allEdges.count)
@@ -120,26 +120,28 @@ public struct Graph<T: BinaryInteger> {
         return found
     }
     
-    public func BFS(from sourceVertex:T) -> [T] {
+    public func BFS(from sourceVertex:Int) -> [Int] {
         let numVertices = Int(nv)
-        let maxT = ~T()
+//        let maxT = ~T()
         var visited = BitArray(repeating: false, count: numVertices)
-        var vertLevel = Array<Int>(repeating: maxT, count: Int(numVertices))
+        var vertLevel = Array<Int>(repeating: Int.max, count: numVertices)
+//        let vertLevelPtr = UnsafeMutableBufferPointer(start: &vertLevel, count: numVertices)
         var nLevel = 1
         var curLevel = [T]()
         curLevel.reserveCapacity(numVertices)
         var nextLevel = [T]()
         nextLevel.reserveCapacity(numVertices)
         
-        visited[Int(sourceVertex)] = true
-        vertLevel[Int(sourceVertex)] = 0
-        curLevel.append(sourceVertex)
+        visited[sourceVertex] = true
+        vertLevel[sourceVertex] = 0
+        curLevel.append(T(sourceVertex))
         
         while !curLevel.isEmpty {
             for vertex in curLevel {
                 for neighbor in neighbors(of: vertex) {
                     if !visited.unsafeTestAndSet(Int(neighbor)) {
                         nextLevel.append(neighbor)
+//                        vertLevelPtr[Int(neighbor)] = nLevel
                         vertLevel[Int(neighbor)] = nLevel
                     }
                 }

@@ -36,12 +36,13 @@ var end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 //
 print(h)
-start = DispatchTime.now()
-let bfs1 = h.BFS(from: 0)
-end = DispatchTime.now()
+for i in 1...5 {
+    start = DispatchTime.now()
+    let bfs1 = h.BFS(from: 0)
+    end = DispatchTime.now()
 //let timeit = end2.uptimeNanoseconds - start2.uptimeNanoseconds
-print("BFS from vertex 0 to \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms; sum = \(bfs1.reduce(0, +))")
-
+    print("Run \(i): BFS from vertex 0 to \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms; sum = \(bfs1.reduce(0, +))")
+}
 //let h = Graph<UInt32>(fromFile: "g1.csv")
 //print("ne = \(h.ne)")
 //print("nv = \(h.nv)")
