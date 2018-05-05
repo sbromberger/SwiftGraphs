@@ -113,19 +113,30 @@ public struct Graph<T: BinaryInteger> {
 
         return hasEdge(src, dst)
     }
-
+    
     public func hasEdge(_ src: T, _ dst: T) -> Bool {
-        let (_, found) = neighbors(of: src).searchSortedIndex(val: dst)
-        return found
+        return neighbors(of: src).searchSortedIndex(val: dst).1
     }
     
-    public func BFS(from sourceVertex:Int) -> [Int] {
+    public var degrees: [Int] {
+        return (1..<colptr.count).map { colptr[$0] - colptr[$0-1] }
+    }
+    
+    public func degree(of vertex:Int) -> Int {
+        return colptr[vertex + 1] - colptr[vertex]
+    }
+    
+    public func degree(of vertex:T) -> Int {
+        return degree(of: Int(vertex))
+    }
+    
+    public func BFS(from sourceVertex:Int) -> [T] {
         let numVertices = Int(nv)
-//        let maxT = ~T()
-        var visited = BitArray(repeating: false, count: numVertices)
-        var vertLevel = Array<Int>(repeating: Int.max, count: numVertices)
+        let maxT = ~T()
+        var visited = BitVector(repeating: false, count: numVertices)
+        var vertLevel = Array<T>(repeating: maxT, count: numVertices)
 //        let vertLevelPtr = UnsafeMutableBufferPointer(start: &vertLevel, count: numVertices)
-        var nLevel = 1
+        var nLevel: T = 1
         var curLevel = [T]()
         curLevel.reserveCapacity(numVertices)
         var nextLevel = [T]()
@@ -138,7 +149,7 @@ public struct Graph<T: BinaryInteger> {
         while !curLevel.isEmpty {
             for vertex in curLevel {
                 for neighbor in neighbors(of: vertex) {
-                    if !visited.unsafeTestAndSet(Int(neighbor)) {
+                    if !visited.testAndSet(Int(neighbor)) {
                         nextLevel.append(neighbor)
 //                        vertLevelPtr[Int(neighbor)] = nLevel
                         vertLevel[Int(neighbor)] = nLevel
