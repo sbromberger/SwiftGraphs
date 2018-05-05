@@ -31,7 +31,7 @@ import Dispatch
 //
 //print("timeit = \(timeit / 1000) us")
 var start = DispatchTime.now()
-let h = Graph<UInt32>(fromVecFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.txt")
+let h = Graph<UInt32>(fromVecFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.txt")
 var end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 //

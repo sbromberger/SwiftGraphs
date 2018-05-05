@@ -70,19 +70,18 @@ public struct Graph<T: BinaryInteger> {
             fatalError("error opening file \(fileName)")
         }
         for var line in reader {
-            line.removeLast()
-            autoreleasepool {
-                if line.hasPrefix("-----") {
-                    inColPtr = false
+            line.removeLast()            
+            if line.hasPrefix("-----") {
+                inColPtr = false
+            } else {
+                let n = Int(line)!
+                if inColPtr {
+                    colptrRead.append(n)
                 } else {
-                    let n = Int(line)!
-                    if inColPtr {
-                        colptrRead.append(n)
-                    } else {
-                        rowindRead.append(T.init(n))
-                    }
+                    rowindRead.append(T.init(n))
                 }
             }
+            
         }
         rowidx = rowindRead
         colptr = colptrRead
@@ -146,7 +145,7 @@ public struct Graph<T: BinaryInteger> {
                     }
                 }
             }
-            nLevel = nLevel &+ 1
+            nLevel += 1
             curLevel.removeAll(keepingCapacity: true)
             (curLevel, nextLevel) = (nextLevel, curLevel)
             curLevel.sort()
