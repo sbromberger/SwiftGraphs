@@ -17,7 +17,7 @@ public struct Graph<T: BinaryInteger> {
         let reversedEdgeList = orderedEdgeList.map { $0.reverse }
         let allEdges = (orderedEdgeList + reversedEdgeList).sorted()
 
-        var numVertices:T = 0
+        var numVertices: T = 0
         var srcs = [T]()
         var dsts = [T]()
         srcs.reserveCapacity(allEdges.count)
@@ -70,7 +70,7 @@ public struct Graph<T: BinaryInteger> {
             fatalError("error opening file \(fileName)")
         }
         for var line in reader {
-            line.removeLast()            
+            line.removeLast()
             if line.hasPrefix("-----") {
                 inColPtr = false
             } else {
@@ -78,15 +78,64 @@ public struct Graph<T: BinaryInteger> {
                 if inColPtr {
                     colptrRead.append(n)
                 } else {
-                    rowindRead.append(T.init(n))
+                    rowindRead.append(T(n))
                 }
             }
-            
         }
         rowidx = rowindRead
         colptr = colptrRead
     }
-    
+
+    public init(fromBinaryFile fileName: String) {
+        let file = URL(fileURLWithPath: fileName)
+        let fileHandle = try! FileHandle(forReadingFrom: file)
+        let magic = fileHandle.readData(ofLength: 4)
+        guard magic.elementsEqual("GRPH".utf8) else {
+            fatalError("\(file) was not a graph file")
+        }
+        let colSize = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size).withUnsafeBytes { (ptr: UnsafePointer<UInt32>) -> Int in
+            return Int(ptr.pointee.bigEndian)
+        }
+        colptr = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size * colSize).withUnsafeBytes({ (ptr: UnsafePointer<UInt32>) -> [Int] in
+            let bufferPointer = UnsafeBufferPointer(start: ptr, count: colSize)
+            return [Int](bufferPointer.lazy.map { Int($0.bigEndian) })
+        })
+        let rowSize = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size).withUnsafeBytes { (ptr: UnsafePointer<UInt32>) -> Int in
+            return Int(ptr.pointee.bigEndian)
+        }
+        rowidx = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size * rowSize).withUnsafeBytes({ (ptr: UnsafePointer<UInt32>) -> [T] in
+            let bufferPointer = UnsafeBufferPointer(start: ptr, count: rowSize)
+            return [T](bufferPointer.lazy.map { T($0.bigEndian) })
+        })
+    }
+
+    public func write(toBinaryFile fileName: String) {
+        let file = URL(fileURLWithPath: fileName)
+        // There should be a way to make FileHandle(forWritingAtPath) create the file but I don't know it
+        try! Data().write(to: file)
+        let fileHandle = try! FileHandle(forWritingTo: file)
+        let magic = Data("GRPH".utf8)
+        fileHandle.write(magic)
+        do {
+            var colData = Data(repeating: 0, count: MemoryLayout<UInt32>.size * (colptr.count + 1))
+            colData.withUnsafeMutableBytes { (ptr: UnsafeMutablePointer<UInt32>) -> Void in
+                ptr.initialize(to: UInt32(colptr.count).bigEndian)
+                let bufferPointer = UnsafeMutableBufferPointer(start: ptr.successor(), count: colptr.count)
+                _ = bufferPointer.initialize(from: colptr.lazy.map { UInt32($0).bigEndian })
+            }
+            fileHandle.write(colData)
+        }
+        do {
+            var rowData = Data(repeating: 0, count: MemoryLayout<UInt32>.size * (rowidx.count + 1))
+            rowData.withUnsafeMutableBytes { (ptr: UnsafeMutablePointer<UInt32>) -> Void in
+                ptr.initialize(to: UInt32(rowidx.count).bigEndian)
+                let bufferPointer = UnsafeMutableBufferPointer(start: ptr.successor(), count: rowidx.count)
+                _ = bufferPointer.initialize(from: rowidx.lazy.map { UInt32($0).bigEndian })
+            }
+            fileHandle.write(rowData)
+        }
+    }
+
     private func vecRange(_ s: Array<T>.Index) -> CountableRange<Array<T>.Index> {
         let rStart = colptr[s]
         let rEnd = colptr[s + 1]
@@ -113,24 +162,24 @@ public struct Graph<T: BinaryInteger> {
 
         return hasEdge(src, dst)
     }
-    
+
     public func hasEdge(_ src: T, _ dst: T) -> Bool {
         return neighbors(of: src).searchSortedIndex(val: dst).1
     }
-    
+
     public var degrees: [Int] {
-        return (1..<colptr.count).map { colptr[$0] - colptr[$0-1] }
+        return (1 ..< colptr.count).map { colptr[$0] - colptr[$0 - 1] }
     }
-    
-    public func degree(of vertex:Int) -> Int {
+
+    public func degree(of vertex: Int) -> Int {
         return colptr[vertex + 1] - colptr[vertex]
     }
-    
-    public func degree(of vertex:T) -> Int {
+
+    public func degree(of vertex: T) -> Int {
         return degree(of: Int(vertex))
     }
-    
-    public func BFS(from sourceVertex:Int) -> [T] {
+
+    public func BFS(from sourceVertex: Int) -> [T] {
         let numVertices = Int(nv)
         let maxT = ~T()
         var visited = BitVector(repeating: false, count: numVertices)
@@ -141,11 +190,11 @@ public struct Graph<T: BinaryInteger> {
         curLevel.reserveCapacity(numVertices)
         var nextLevel = [T]()
         nextLevel.reserveCapacity(numVertices)
-        
+
         visited[sourceVertex] = true
         vertLevel[sourceVertex] = 0
         curLevel.append(T(sourceVertex))
-        
+
         while !curLevel.isEmpty {
             for vertex in curLevel {
                 for neighbor in neighbors(of: vertex) {
@@ -165,7 +214,6 @@ public struct Graph<T: BinaryInteger> {
     }
 }
 
-
 extension Graph: CustomStringConvertible {
     public var description: String {
         return "{\(nv), \(ne)} Graph"
@@ -173,5 +221,4 @@ extension Graph: CustomStringConvertible {
 }
 
 extension Graph {
-
 }

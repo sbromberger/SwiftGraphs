@@ -8,24 +8,24 @@
 
 public struct BitVector {
     private var bits: Array<Int>
-    
+
     private let blockSize = Int.bitWidth
-    
+
     public init(repeating: Bool, count: Int) {
         let fillInt = repeating ? ~0 : 0
         let nBlocks: Int = (count / blockSize) + 1
         bits = [Int](repeating: fillInt, count: nBlocks)
     }
-    
-    private func getBlockAndOffset(of bitIndex:Int) -> (Int, Int) {
+
+    private func getBlockAndOffset(of bitIndex: Int) -> (Int, Int) {
         return (bitIndex / blockSize, bitIndex % blockSize)
     }
-    
+
 //    public let startIndex = 0
     public var startIndex: Int { return 0 }
     public var endIndex: Int { return bits.count * blockSize }
-    
-    public subscript(_ bitIndex:Int) -> Bool {
+
+    public subscript(_ bitIndex: Int) -> Bool {
         get {
             let (block, offset) = getBlockAndOffset(of: bitIndex)
             let mask = 1 << offset
@@ -41,7 +41,7 @@ public struct BitVector {
             }
         }
     }
-    
+
     public mutating func testAndSet(_ bitIndex: Int) -> Bool {
         let (block, offset) = getBlockAndOffset(of: bitIndex)
         let mask = 1 << offset

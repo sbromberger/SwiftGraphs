@@ -36,10 +36,9 @@ extension RandomAccessCollection where Self: RangeReplaceableCollection, Element
         let found = low < endIndex ? self[low] == val : false
         return (low, found)
     }
-    
+
     public mutating func insertSorted(val: Element) {
         let (index, _) = searchSortedIndex(val: val)
         insert(val, at: index)
     }
 }
-
