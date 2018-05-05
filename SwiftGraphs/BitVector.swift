@@ -12,7 +12,7 @@ public struct BitVector {
     private let blockSize = Int.bitWidth
     
     public init(repeating: Bool, count: Int) {
-        let fillInt = repeating ? Int.max : 0
+        let fillInt = repeating ? ~0 : 0
         let nBlocks: Int = (count / blockSize) + 1
         bits = [Int](repeating: fillInt, count: nBlocks)
     }
@@ -21,7 +21,11 @@ public struct BitVector {
         return (bitIndex / blockSize, bitIndex % blockSize)
     }
     
-    subscript(_ bitIndex:Int) -> Bool {
+//    public let startIndex = 0
+    public var startIndex: Int { return 0 }
+    public var endIndex: Int { return bits.count * blockSize }
+    
+    public subscript(_ bitIndex:Int) -> Bool {
         get {
             let (block, offset) = getBlockAndOffset(of: bitIndex)
             let mask = 1 << offset
@@ -30,7 +34,11 @@ public struct BitVector {
         set {
             let (block, offset) = getBlockAndOffset(of: bitIndex)
             let mask = 1 << offset
-            bits[block] |= mask
+            if newValue {
+                bits[block] |= mask
+            } else {
+                bits[block] &= ~mask
+            }
         }
     }
     
@@ -38,7 +46,9 @@ public struct BitVector {
         let (block, offset) = getBlockAndOffset(of: bitIndex)
         let mask = 1 << offset
         let oldval = mask & bits[block] != 0
-        bits[block] |= mask
+        if !oldval {
+            bits[block] |= mask
+        }
         return oldval
     }
 }

@@ -9,16 +9,14 @@
 /* Begin PBXBuildFile section */
 		3B341906209A8F71009A187D /* radixSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B341905209A8F71009A187D /* radixSort.swift */; };
 		3B341908209AAD32009A187D /* RandomAccessCollectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B341907209AAD32009A187D /* RandomAccessCollectionExtensions.swift */; };
-		3B34190A209E3B73009A187D /* NewBitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B341909209E3B73009A187D /* NewBitArray.swift */; };
+		3B34190A209E3B73009A187D /* BitVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B341909209E3B73009A187D /* BitVector.swift */; };
 		3B4257A9209A1E40008116FC /* LineReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4257A8209A1E40008116FC /* LineReader.swift */; };
 		5DEFB50D20997B2F00711BDC /* SwiftGraphsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEFB50C20997B2F00711BDC /* SwiftGraphsTests.swift */; };
-		5DEFB51220997BDD00711BDC /* BitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64C209975E400CD8CA6 /* BitArray.swift */; };
 		5DEFB51320997BDD00711BDC /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64A209975E400CD8CA6 /* Edge.swift */; };
 		5DEFB51420997BDD00711BDC /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64B209975E400CD8CA6 /* Graph.swift */; };
 		5DFDE644209975A500CD8CA6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE643209975A500CD8CA6 /* main.swift */; };
 		5DFDE64D209975E400CD8CA6 /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64A209975E400CD8CA6 /* Edge.swift */; };
 		5DFDE64E209975E400CD8CA6 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64B209975E400CD8CA6 /* Graph.swift */; };
-		5DFDE64F209975E400CD8CA6 /* BitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64C209975E400CD8CA6 /* BitArray.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,7 +34,7 @@
 /* Begin PBXFileReference section */
 		3B341905209A8F71009A187D /* radixSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = radixSort.swift; sourceTree = "<group>"; };
 		3B341907209AAD32009A187D /* RandomAccessCollectionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAccessCollectionExtensions.swift; sourceTree = "<group>"; };
-		3B341909209E3B73009A187D /* NewBitArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBitArray.swift; sourceTree = "<group>"; };
+		3B341909209E3B73009A187D /* BitVector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitVector.swift; sourceTree = "<group>"; };
 		3B4257A8209A1E40008116FC /* LineReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineReader.swift; sourceTree = "<group>"; };
 		5DEFB50A20997B2F00711BDC /* SwiftGraphsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftGraphsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEFB50C20997B2F00711BDC /* SwiftGraphsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftGraphsTests.swift; sourceTree = "<group>"; };
@@ -45,7 +43,6 @@
 		5DFDE643209975A500CD8CA6 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5DFDE64A209975E400CD8CA6 /* Edge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
 		5DFDE64B209975E400CD8CA6 /* Graph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
-		5DFDE64C209975E400CD8CA6 /* BitArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitArray.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,8 +97,7 @@
 				3B341907209AAD32009A187D /* RandomAccessCollectionExtensions.swift */,
 				3B341905209A8F71009A187D /* radixSort.swift */,
 				3B4257A8209A1E40008116FC /* LineReader.swift */,
-				5DFDE64C209975E400CD8CA6 /* BitArray.swift */,
-				3B341909209E3B73009A187D /* NewBitArray.swift */,
+				3B341909209E3B73009A187D /* BitVector.swift */,
 				5DFDE64A209975E400CD8CA6 /* Edge.swift */,
 				5DFDE64B209975E400CD8CA6 /* Graph.swift */,
 			);
@@ -198,7 +194,6 @@
 			files = (
 				5DEFB51420997BDD00711BDC /* Graph.swift in Sources */,
 				5DEFB50D20997B2F00711BDC /* SwiftGraphsTests.swift in Sources */,
-				5DEFB51220997BDD00711BDC /* BitArray.swift in Sources */,
 				5DEFB51320997BDD00711BDC /* Edge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,10 +206,9 @@
 				3B4257A9209A1E40008116FC /* LineReader.swift in Sources */,
 				3B341908209AAD32009A187D /* RandomAccessCollectionExtensions.swift in Sources */,
 				3B341906209A8F71009A187D /* radixSort.swift in Sources */,
-				3B34190A209E3B73009A187D /* NewBitArray.swift in Sources */,
+				3B34190A209E3B73009A187D /* BitVector.swift in Sources */,
 				5DFDE64D209975E400CD8CA6 /* Edge.swift in Sources */,
 				5DFDE644209975A500CD8CA6 /* main.swift in Sources */,
-				5DFDE64F209975E400CD8CA6 /* BitArray.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
