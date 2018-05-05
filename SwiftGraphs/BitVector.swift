@@ -1,5 +1,5 @@
 //
-//  NewBitArray.swift
+//  BitVector.swift
 //  SwiftGraphs
 //
 //  Created by Bromberger, Seth on 2018-05-05.
