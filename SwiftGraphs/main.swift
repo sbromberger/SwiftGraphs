@@ -13,6 +13,15 @@ import Dispatch
 // print(ba)
 // let edge = Edge(UInt(1), UInt(2))
 // let edge2 = Edge(1, 2)
+
+extension Double
+{
+    func truncate(places : Int)-> Double
+    {
+        return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
+    }
+}
+
 let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3)]
 let g = Graph<UInt8>(fromEdgeList: edges)
 print(g.degrees)
@@ -20,80 +29,46 @@ for i in 0 ..< g.nv {
     print("degree of \(i) = \(g.degree(of: i))")
 }
 
-// exit(0)
 
-// print(g)
-// print(g.rowidx)
-// print(g.colptr)
-//
-//
-// print("neighbors of vertex 1: \(g.neighbors(of: 1))")
-// print("vertices of g = \(Array(g.vertices))")
-// print("edges of g = \(g.edges())")
-// let start = DispatchTime.now()
-// let h = Graph<UInt32>(fromFile: "/Users/bromberger1/dev/swift/SwiftGraphs/SwiftGraphs/data/edgecsv-10m-100m.csv")
-// let end = DispatchTime.now()
-// print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000.0) s")
-// let timeit = timeIt { _ = g.BFS(from: 0) }
-//
-// print("timeit = \(timeit / 1000) us")
+
+let edges2 :[Edge<UInt8>] = [Edge(8,9), Edge(9, 10), Edge(8, 10)]
+let ccg = Graph<UInt8>(fromEdgeList: edges + edges2)
+
+let cc = ccg.connectedComponents
+print(cc)
+print("connected? \(ccg.isConnected)")
+
 var start = DispatchTime.now()
-let h = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
+let h = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
 
 var end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
-//
+////
 print(h)
+
+start = DispatchTime.now()
+let hcc = h.isConnected
+end = DispatchTime.now()
+print("isConnected took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 var times = [Double]()
 var ms = 1_000_000.0
-for i in 1 ... 40 {
+for i in 1 ... 100_000 {
     start = DispatchTime.now()
     let bfs1 = h.BFS(from: 0)
     end = DispatchTime.now()
     let timediff = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / ms
     // let timeit = end2.uptimeNanoseconds - start2.uptimeNanoseconds
-    print("Run \(i): BFS from vertex 0 to \(timediff) ms; sum = \(bfs1.reduce(0, +))")
+//    print("Run \(i): BFS from vertex 0 to \(timediff) ms; sum = \(bfs1.reduce(0, +))")
     times.append(timediff)
-}
+    let timeAvg = times.reduce(0, +) / Double(times.count)
+    let sumOfSquaredAvgDiff = times.map { pow($0 - timeAvg, 2.0) }.reduce(0, +)
+    let timeStd = sqrt(sumOfSquaredAvgDiff / Double(times.count - 1))
+    print("\(i): curr: \(timediff.truncate(places: 3)), min: \(times.min()!.truncate(places: 3)), max: \(times.max()!.truncate(places: 3)), avg: \(timeAvg.truncate(places: 3)), std: \(timeStd.truncate(places: 3))")
 
+}
+print("FINAL")
 let timeAvg = times.reduce(0, +) / Double(times.count)
 let sumOfSquaredAvgDiff = times.map { pow($0 - timeAvg, 2.0) }.reduce(0, +)
 let timeStd = sqrt(sumOfSquaredAvgDiff / Double(times.count - 1))
 print("Times: min: \(times.min()!), max: \(times.max()!), avg: \(timeAvg), std: \(timeStd)")
 
-// let h = Graph<UInt32>(fromFile: "g1.csv")
-// print("ne = \(h.ne)")
-// print("nv = \(h.nv)")
-// let foo = h.edges()
-// print("type of foo = \(type(of: foo))")
-// print("vertices of h = \(Array(h.vertices))")
-// print("edges of h = \(h.edges())")
-// print("h has edge (1,2) = \(h.hasEdge(Edge<UInt32>(1, 2)))")
-// print("h has edge (1,4) = \(h.hasEdge(Edge<UInt32>(1, 4)))")
-// print("h has edge (1,2) = \(h.hasEdge(1, 2))")
-// print("h has edge (1,4) = \(h.hasEdge(1, 4))")
-//
-// print("g.test = \(g.test)")
-
-// import Foundation
-
-// var arr1 = (1...5_000_000).map{_ in arc4random()}
-// var arr2 = arr1
-// var arr3 = arr1
-// let start = DispatchTime.now()
-// radixSort(&arr1)
-// let end = DispatchTime.now()
-// print("radixSort(&arr1) time \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
-//
-// print("arr1 == arr2 = \(arr1 == arr2)")
-// let startb = DispatchTime.now()
-// arr2.sort()
-// let endb = DispatchTime.now()
-// print("arr2.sort() time \(Double(endb.uptimeNanoseconds - startb.uptimeNanoseconds) / 1_000_000.0) ms")
-// print("arr1 == arr2 = \(arr1 == arr2)")
-// print("arr1 == arr3 = \(arr1 == arr3)")
-// let startc = DispatchTime.now()
-// arr3.radixSort()
-// let endc = DispatchTime.now()
-// print("arr3.radixSort() time \(Double(endc.uptimeNanoseconds - startc.uptimeNanoseconds) / 1_000_000.0) ms")
-// print("arr1 == arr3 = \(arr1 == arr3)")

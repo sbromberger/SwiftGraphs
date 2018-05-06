@@ -1,13 +1,30 @@
 import Foundation
 
-public struct Graph<T: BinaryInteger> {
+protocol AbstractGraph {
+    associatedtype T: FixedWidthInteger
+    var eltype: Any.Type { get }
+    var isDirected: Bool { get }
+    var nv: T { get }
+    var ne: Int { get }
+    var vertices: StrideTo<T> { get }
+    var edges: [Edge<T>] { get }
+    var degrees: [Int] { get }
+    func hasEdge(_ edge: Edge<T>) -> Bool
+    func degree(of vertex: T) -> Int
+    func neighbors(of vertex: T) -> ArraySlice<T>
+    func inNeighbors(of vertex: T) -> ArraySlice<T>
+    func outNeighbors(of vertex: T) -> ArraySlice<T>
+}
+
+public struct Graph<T: FixedWidthInteger>: AbstractGraph {
     let rowidx: Array<T>
     let colptr: Array<Array<T>.Index>
+    let isDirected: Bool = false
+    var eltype: Any.Type { return T.self }
 
-    static var eltype: Any.Type { return T.self }
     public var nv: T { return T((colptr.count - 1)) }
     public var ne: Int { return rowidx.count / 2 }
-
+    
     public var vertices: StrideTo<T> {
         return stride(from: T(0), to: nv, by: +1)
     }
@@ -146,7 +163,11 @@ public struct Graph<T: BinaryInteger> {
         let range = vecRange(Array<T>.Index(vertex))
         return rowidx[range]
     }
-    public func edges() -> [Edge<T>] {
+    
+    public func inNeighbors(of vertex: T) -> ArraySlice<T> { return neighbors(of: vertex) }
+    public func outNeighbors(of vertex: T) -> ArraySlice<T> { return neighbors(of: vertex) }
+    
+    public var edges: [Edge<T>] {
         var edgeList = [Edge<T>]()
         edgeList.reserveCapacity(ne)
         for src in vertices {
@@ -175,40 +196,84 @@ public struct Graph<T: BinaryInteger> {
         return colptr[vertex + 1] - colptr[vertex]
     }
 
+    public var connectedComponents : [[T]] {
+        var label = [T](repeating: 0, count: Int(nv))
+        for u in vertices {
+            if label[Int(u)] == 0 {
+                label[Int(u)] = u
+                var Q = [T]()
+                Q.append(u)
+                if let src = Q.popLast() {
+                    for vertex in neighbors(of: src) {
+                        if label[Int(vertex)] == 0 {
+                            Q.append(vertex)
+                            label[Int(vertex)] = u
+                        }
+                    }
+                }
+            }
+        }
+        var componentDict = [T: T]()
+        var cVec = [[T]]()
+        var i: T = 0
+        for (v, l) in label.enumerated() {
+            let optIndex  = componentDict[l]
+            if optIndex == nil {
+                componentDict.updateValue(i, forKey: l)
+            }
+            let index = optIndex ?? i
+            
+            if cVec.count > index {
+                cVec[Int(index)].append(T(v))
+            } else {
+                cVec.append([T(v)])
+                i += 1
+            }
+        }
+        
+        return cVec
+    }
+
+    public var isConnected : Bool {
+        return ne + 1 >= nv && connectedComponents.count == 1
+    }
+    
     public func degree(of vertex: T) -> Int {
         return degree(of: Int(vertex))
     }
 
-    public func BFS(from sourceVertex: Int) -> [T] {
+    public func BFS(from sourceVertex:T) -> [T] {
         let numVertices = Int(nv)
-        let maxT = ~T()
-        var visited = BitVector(repeating: false, count: numVertices)
-        var vertLevel = Array<T>(repeating: maxT, count: numVertices)
-//        let vertLevelPtr = UnsafeMutableBufferPointer(start: &vertLevel, count: numVertices)
+        var vertLevel = Array<T>(repeating: T.max, count: numVertices)
         var nLevel: T = 1
-        var curLevel = [T]()
-        curLevel.reserveCapacity(numVertices)
-        var nextLevel = [T]()
-        nextLevel.reserveCapacity(numVertices)
-
-        visited[sourceVertex] = true
-        vertLevel[sourceVertex] = 0
-        curLevel.append(T(sourceVertex))
-
-        while !curLevel.isEmpty {
-            for vertex in curLevel {
-                for neighbor in neighbors(of: vertex) {
-                    if !visited.testAndSet(Int(neighbor)) {
-                        nextLevel.append(neighbor)
-//                        vertLevelPtr[Int(neighbor)] = nLevel
-                        vertLevel[Int(neighbor)] = nLevel
+        vertLevel.withUnsafeMutableBufferPointer { vertLevel in
+            let visited = UnsafeBitArray<Int>(repeating: false, count: numVertices)
+            var curLevel = UnsafeArray<T>(capacity: numVertices)
+            var nextLevel = UnsafeArray<T>(capacity: numVertices)
+            defer {
+                curLevel.deallocate()
+                nextLevel.deallocate()
+            }
+            
+            visited[Int(sourceVertex)] = true
+            vertLevel[Int(sourceVertex)] = 0
+            curLevel.append(sourceVertex)
+            
+            while !curLevel.isEmpty {
+                for vertex in curLevel {
+                    for neighbor in neighbors(of: vertex) {
+                        if !visited[Int(neighbor)] {
+                            visited[Int(neighbor)] = true
+                            nextLevel.append(neighbor)
+                            vertLevel[Int(neighbor)] = nLevel
+                        }
                     }
                 }
+                nLevel += 1
+                curLevel.removeAll()
+                (curLevel, nextLevel) = (nextLevel, curLevel)
+                curLevel.sort()
             }
-            nLevel += 1
-            curLevel.removeAll(keepingCapacity: true)
-            (curLevel, nextLevel) = (nextLevel, curLevel)
-            curLevel.sort()
         }
         return vertLevel
     }
