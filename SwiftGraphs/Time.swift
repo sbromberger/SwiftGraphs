@@ -6,10 +6,10 @@
 //  Copyright © 2018 Seth Bromberger. All rights reserved.
 //
 
-import Foundation
 import Dispatch
+import Foundation
 
-func timeIt(_ f: () -> () ) -> UInt64 {
+func timeIt(_ f: () -> Void) -> UInt64 {
     let start = DispatchTime.now()
     f()
     let end = DispatchTime.now()
