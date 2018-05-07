@@ -41,14 +41,4 @@ public struct BitVector : RandomAccessCollection {
             }
         }
     }
-
-    public mutating func testAndSet(_ bitIndex: Int) -> Bool {
-        let (block, offset) = getBlockAndOffset(of: bitIndex)
-        let mask = 1 << offset
-        let oldval = mask & bits[block] != 0
-        if !oldval {
-            bits[block] |= mask
-        }
-        return oldval
-    }
 }
