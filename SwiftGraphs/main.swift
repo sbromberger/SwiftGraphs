@@ -1,4 +1,6 @@
 import Dispatch
+import QuartzCore
+
 
 // func timeIt(_ fn: () -> ()) -> UInt64 {
 //    let start = DispatchTime.now()
@@ -13,12 +15,12 @@ import Dispatch
 // print(ba)
 // let edge = Edge(UInt(1), UInt(2))
 // let edge2 = Edge(1, 2)
-let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3)]
-let g = Graph<UInt8>(fromEdgeList: edges)
-print(g.degrees)
-for i in 0 ..< g.nv {
-    print("degree of \(i) = \(g.degree(of: i))")
-}
+//let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3)]
+//let g = Graph<UInt8>(fromEdgeList: edges)
+//print(g.degrees)
+//for i in 0 ..< g.nv {
+//    print("degree of \(i) = \(g.degree(of: i))")
+//}
 
 // exit(0)
 
@@ -38,8 +40,7 @@ for i in 0 ..< g.nv {
 //
 // print("timeit = \(timeit / 1000) us")
 var start = DispatchTime.now()
-let h = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
-
+let h = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
 var end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 //
@@ -47,10 +48,13 @@ print(h)
 var times = [Double]()
 var ms = 1_000_000.0
 for i in 1 ... 40 {
-    start = DispatchTime.now()
+//    start = DispatchTime.now()
+    let start = CACurrentMediaTime()
     let bfs1 = h.BFS(from: 0)
-    end = DispatchTime.now()
-    let timediff = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / ms
+//    end = DispatchTime.now()
+    let end = CACurrentMediaTime()
+//    let timediff = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / ms
+    let timediff = (end - start) * 1000
     // let timeit = end2.uptimeNanoseconds - start2.uptimeNanoseconds
     print("Run \(i): BFS from vertex 0 to \(timediff) ms; sum = \(bfs1.reduce(0, +))")
     times.append(timediff)

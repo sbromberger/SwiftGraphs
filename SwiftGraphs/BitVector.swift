@@ -6,7 +6,7 @@
 //  Copyright © 2018 Seth Bromberger. All rights reserved.
 //
 
-public struct BitVector  {
+public struct BitVector : RandomAccessCollection {
     private var bits: Array<Int>
 
     private let blockSize = Int.bitWidth

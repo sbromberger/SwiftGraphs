@@ -12,55 +12,6 @@ public struct Graph<T: BinaryInteger> {
         return stride(from: T(0), to: nv, by: +1)
     }
 
-    public init(fromEdgeList edgeList: [Edge<T>]) {
-        let orderedEdgeList = edgeList.map { $0.ordered }
-        let reversedEdgeList = orderedEdgeList.map { $0.reverse }
-        let allEdges = (orderedEdgeList + reversedEdgeList).sorted()
-
-        var numVertices: T = 0
-        var srcs = [T]()
-        var dsts = [T]()
-        srcs.reserveCapacity(allEdges.count)
-        dsts.reserveCapacity(allEdges.count)
-
-        for edge in allEdges {
-            srcs.append(edge.src)
-            dsts.append(edge.dst)
-            if numVertices < edge.src {
-                numVertices = edge.src
-            }
-            if numVertices < edge.dst {
-                numVertices = edge.dst
-            }
-        }
-        numVertices += 1
-        var f_ind = [Array<T>.Index]()
-        for v in stride(from: 0 as T, through: numVertices, by: +1) {
-            f_ind.append(srcs.searchSortedIndex(val: v).0)
-        }
-        rowidx = dsts
-        colptr = f_ind
-    }
-
-    public init(fromCSV fileName: String) {
-        let furl = URL(fileURLWithPath: fileName)
-        var edges = [Edge<T>]()
-        do {
-            let s = try String(contentsOf: furl)
-            let lines = s.split(separator: "\n")
-            for line in lines {
-                let splits = line.split(separator: ",", maxSplits: 2)
-                let src = T(Int(splits[0])!)
-                let dst = T(Int(splits[1])!)
-                edges.append(Edge(src, dst))
-            }
-        } catch {
-            print("error processing file \(fileName): \(error)")
-        }
-
-        self.init(fromEdgeList: edges)
-    }
-
     public init(fromVecFile fileName: String) {
         var colptrRead = [Int]()
         var rowindRead = [T]()

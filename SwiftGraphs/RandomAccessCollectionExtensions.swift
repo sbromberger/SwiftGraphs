@@ -23,22 +23,4 @@ extension ArraySlice where Element: Comparable {
 }
 
 extension RandomAccessCollection where Self: RangeReplaceableCollection, Element: Comparable {
-    public func searchSortedIndex(val: Element) -> (Index, Bool) {
-        var (low, high) = (startIndex, endIndex)
-        while low != high {
-            let mid = index(low, offsetBy: distance(from: low, to: high) / 2)
-            if self[mid] < val {
-                low = index(after: mid)
-            } else {
-                high = mid
-            }
-        }
-        let found = low < endIndex ? self[low] == val : false
-        return (low, found)
-    }
-
-    public mutating func insertSorted(val: Element) {
-        let (index, _) = searchSortedIndex(val: val)
-        insert(val, at: index)
-    }
 }
