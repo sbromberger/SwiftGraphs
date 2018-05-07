@@ -1,5 +1,25 @@
 import Foundation
 
+public struct Edge<T: BinaryInteger> {
+    let src: T
+    let dst: T
+    
+    public init(_ s: T, _ d: T) {
+        src = s
+        dst = d
+    }
+    
+    public var ordered: Edge {
+        if src > dst {
+            return Edge(dst, src)
+        } else { return self }
+    }
+    
+    public var reverse: Edge {
+        return Edge(dst, src)
+    }
+}
+
 public struct Graph<T: BinaryInteger> {
     let rowidx: Array<T>
     let colptr: Array<Array<T>.Index>
@@ -51,7 +71,6 @@ public struct Graph<T: BinaryInteger> {
         let maxT = ~T()
         var visited = BitVector(repeating: false, count: numVertices)
         var vertLevel = Array<T>(repeating: maxT, count: numVertices)
-//        let vertLevelPtr = UnsafeMutableBufferPointer(start: &vertLevel, count: numVertices)
         var nLevel: T = 1
         var curLevel = [T]()
         curLevel.reserveCapacity(numVertices)
@@ -68,7 +87,6 @@ public struct Graph<T: BinaryInteger> {
                     if !visited[Int(neighbor)] {
                         visited[Int(neighbor)] = true
                         nextLevel.append(neighbor)
-//                        vertLevelPtr[Int(neighbor)] = nLevel
                         vertLevel[Int(neighbor)] = nLevel
                     }
                 }
@@ -86,7 +104,4 @@ extension Graph: CustomStringConvertible {
     public var description: String {
         return "{\(nv), \(ne)} Graph"
     }
-}
-
-extension Graph {
 }

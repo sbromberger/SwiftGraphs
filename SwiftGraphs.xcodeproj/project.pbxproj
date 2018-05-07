@@ -9,10 +9,8 @@
 /* Begin PBXBuildFile section */
 		3B34190A209E3B73009A187D /* BitVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B341909209E3B73009A187D /* BitVector.swift */; };
 		5DEFB50D20997B2F00711BDC /* SwiftGraphsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEFB50C20997B2F00711BDC /* SwiftGraphsTests.swift */; };
-		5DEFB51320997BDD00711BDC /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64A209975E400CD8CA6 /* Edge.swift */; };
 		5DEFB51420997BDD00711BDC /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64B209975E400CD8CA6 /* Graph.swift */; };
 		5DFDE644209975A500CD8CA6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE643209975A500CD8CA6 /* main.swift */; };
-		5DFDE64D209975E400CD8CA6 /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64A209975E400CD8CA6 /* Edge.swift */; };
 		5DFDE64E209975E400CD8CA6 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64B209975E400CD8CA6 /* Graph.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,7 +33,6 @@
 		5DEFB50E20997B2F00711BDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5DFDE640209975A500CD8CA6 /* SwiftGraphs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftGraphs; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DFDE643209975A500CD8CA6 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		5DFDE64A209975E400CD8CA6 /* Edge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
 		5DFDE64B209975E400CD8CA6 /* Graph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,7 +86,6 @@
 			children = (
 				5DFDE643209975A500CD8CA6 /* main.swift */,
 				3B341909209E3B73009A187D /* BitVector.swift */,
-				5DFDE64A209975E400CD8CA6 /* Edge.swift */,
 				5DFDE64B209975E400CD8CA6 /* Graph.swift */,
 			);
 			path = SwiftGraphs;
@@ -185,7 +181,6 @@
 			files = (
 				5DEFB51420997BDD00711BDC /* Graph.swift in Sources */,
 				5DEFB50D20997B2F00711BDC /* SwiftGraphsTests.swift in Sources */,
-				5DEFB51320997BDD00711BDC /* Edge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,7 +190,6 @@
 			files = (
 				5DFDE64E209975E400CD8CA6 /* Graph.swift in Sources */,
 				3B34190A209E3B73009A187D /* BitVector.swift in Sources */,
-				5DFDE64D209975E400CD8CA6 /* Edge.swift in Sources */,
 				5DFDE644209975A500CD8CA6 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
