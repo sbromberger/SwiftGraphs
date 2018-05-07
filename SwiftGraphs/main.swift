@@ -45,6 +45,9 @@ var end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 ////
 print(h)
+print("Degree histogram of h:")
+print(h.degreeHistogram.sorted(by:<))
+exit(0)
 
 start = DispatchTime.now()
 let hcc = h.isConnected

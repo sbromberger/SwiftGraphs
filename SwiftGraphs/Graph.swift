@@ -1,14 +1,14 @@
 import Foundation
 
 protocol AbstractGraph {
-    associatedtype T: FixedWidthInteger
+    associatedtype T: FixedWidthInteger where T.Stride: SignedInteger
     var eltype: Any.Type { get }
     var isDirected: Bool { get }
     var nv: T { get }
     var ne: Int { get }
-    var vertices: StrideTo<T> { get }
+    var vertices: CountableRange<T> { get }
     var edges: [Edge<T>] { get }
-    var degrees: [Int] { get }
+    var degrees: [T] { get }
     func hasEdge(_ edge: Edge<T>) -> Bool
     func degree(of vertex: T) -> Int
     func neighbors(of vertex: T) -> ArraySlice<T>
@@ -16,7 +16,7 @@ protocol AbstractGraph {
     func outNeighbors(of vertex: T) -> ArraySlice<T>
 }
 
-public struct Graph<T: FixedWidthInteger>: AbstractGraph {
+public struct Graph<T: FixedWidthInteger> : AbstractGraph where T.Stride: SignedInteger {
     let rowidx: Array<T>
     let colptr: Array<Array<T>.Index>
     let isDirected: Bool = false
@@ -25,8 +25,8 @@ public struct Graph<T: FixedWidthInteger>: AbstractGraph {
     public var nv: T { return T((colptr.count - 1)) }
     public var ne: Int { return rowidx.count / 2 }
     
-    public var vertices: StrideTo<T> {
-        return stride(from: T(0), to: nv, by: +1)
+    public var vertices: CountableRange<T> {
+        return (0 as T)..<nv
     }
 
     public init(fromEdgeList edgeList: [Edge<T>]) {
@@ -52,7 +52,7 @@ public struct Graph<T: FixedWidthInteger>: AbstractGraph {
         }
         numVertices += 1
         var f_ind = [Array<T>.Index]()
-        for v in stride(from: 0 as T, through: numVertices, by: +1) {
+        for v in (0 as T)...numVertices {
             f_ind.append(srcs.searchSortedIndex(val: v).0)
         }
         rowidx = dsts
@@ -188,14 +188,22 @@ public struct Graph<T: FixedWidthInteger>: AbstractGraph {
         return neighbors(of: src).searchSortedIndex(val: dst).1
     }
 
-    public var degrees: [Int] {
-        return (1 ..< colptr.count).map { colptr[$0] - colptr[$0 - 1] }
+    public var degrees: [T] {
+        return (1 ..< colptr.count).map { T(colptr[$0] - colptr[$0 - 1]) }
     }
 
     public func degree(of vertex: Int) -> Int {
         return colptr[vertex + 1] - colptr[vertex]
     }
 
+    public var degreeHistogram: [T: Int] {
+        var degHist = [T:Int]()
+        for d in degrees {
+            degHist[d, default: 0] += 1
+        }
+        return degHist
+    }
+    
     public var connectedComponents : [[T]] {
         var label = [T](repeating: 0, count: Int(nv))
         for u in vertices {
