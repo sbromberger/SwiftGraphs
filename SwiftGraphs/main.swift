@@ -57,7 +57,7 @@ print(h)
 //
 start = DispatchTime.now()
 //let ds = h.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
-let ds = h.dijkstraShortestPaths(from: 1)
+let ds = h.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
 end = DispatchTime.now()
 print("ds.pathCounts[0..<10] = \(ds.pathCounts[0..<10])")
 print("pathCounts sum = \(ds.pathCounts.reduce(0, +))")

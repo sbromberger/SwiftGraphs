@@ -4,3 +4,4 @@
 data/
 attic/
 *.tgz
+*.xcuserstate

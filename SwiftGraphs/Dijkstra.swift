@@ -50,8 +50,8 @@ extension AbstractGraph {
         pathCounts[Int(sourceVertex)] = 1
         H.push(DistVertex(distance: 0, vertex: sourceVertex))
         dists.withUnsafeMutableBufferPointer { dists in
-            while !H.isEmpty {
-                let currentDistVertex = H.pop()!
+            while let currentDistVertex = H.pop() {
+//                let currentDistVertex = H.pop()!
                 let vertex = currentDistVertex.vertex
                 let intVertex = Int(vertex)
                 if trackVertices {
