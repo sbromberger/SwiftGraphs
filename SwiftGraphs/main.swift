@@ -25,28 +25,45 @@ extension Double
 let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3)]
 let g = Graph<UInt8>(fromEdgeList: edges)
 print(g.degrees)
-for i in 0 ..< g.nv {
-    print("degree of \(i) = \(g.degree(of: i))")
-}
+let zz = g.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
+print("dsp = \(zz)")
 
-
-
-let edges2 :[Edge<UInt8>] = [Edge(8,9), Edge(9, 10), Edge(8, 10)]
-let ccg = Graph<UInt8>(fromEdgeList: edges + edges2)
-
-let cc = ccg.connectedComponents
-print(cc)
-print("connected? \(ccg.isConnected)")
-
+//for i in 0 ..< g.nv {
+//    print("degree of \(i) = \(g.degree(of: i))")
+//}
+//
+//
+//
+//let edges2 :[Edge<UInt8>] = [Edge(8,9), Edge(9, 10), Edge(8, 10)]
+//let ccg = Graph<UInt8>(fromEdgeList: edges + edges2)
+//
+//let cc = ccg.connectedComponents
+//print(cc)
+//print("connected? \(ccg.isConnected)")
+//
 var start = DispatchTime.now()
-let h = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
+let h = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
 
 var end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 ////
 print(h)
-print("Degree histogram of h:")
-print(h.degreeHistogram.sorted(by:<))
+//print("Degree histogram of h:")
+//start = DispatchTime.now()
+//print(h.degreeHistogram.sorted(by:<))
+//end = DispatchTime.now()
+//print("Histogram took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+//print("Density = \(h.density)")
+//
+start = DispatchTime.now()
+//let ds = h.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
+let ds = h.dijkstraShortestPaths(from: 1)
+end = DispatchTime.now()
+print("ds.pathCounts[0..<10] = \(ds.pathCounts[0..<10])")
+print("pathCounts sum = \(ds.pathCounts.reduce(0, +))")
+
+print("DSP took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+
 exit(0)
 
 start = DispatchTime.now()

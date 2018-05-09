@@ -29,6 +29,10 @@ public struct Graph<T: FixedWidthInteger> : AbstractGraph where T.Stride: Signed
         return (0 as T)..<nv
     }
 
+    public var density: Double {
+        return Double(ne) / Double(Int(nv)) / Double(Int(nv-1)) * 2
+    }
+    
     public init(fromEdgeList edgeList: [Edge<T>]) {
         let orderedEdgeList = edgeList.map { $0.ordered }
         let reversedEdgeList = orderedEdgeList.map { $0.reverse }
