@@ -5,16 +5,16 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
     let colptr: Array<Array<T>.Index>
     let backwardRowidx: Array<T>
     let backwardColptr: Array<Array<T>.Index>
-    
+
     let isDirected: Bool = true
     var eltype: Any.Type { return T.self }
-    
+
     public var ne: Int { return rowidx.count }
-    
+
     public var density: Double {
         return Double(ne) / Double(Int(nv)) / Double(Int(nv - 1))
     }
-    
+
     public init(fromEdgeList edges: [Edge<T>]) {
         let allEdges = edges.sorted()
         var numVertices: T = 0
@@ -22,7 +22,7 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
         var dsts = [T]()
         srcs.reserveCapacity(allEdges.count)
         dsts.reserveCapacity(allEdges.count)
-        
+
         for edge in allEdges {
             srcs.append(edge.src)
             dsts.append(edge.dst)
@@ -40,14 +40,13 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
             f_ind.append(srcs.searchSortedIndex(val: v).0)
             b_ind.append(dsts.searchSortedIndex(val: v).0)
         }
-        
-        
+
         rowidx = dsts
         colptr = f_ind
         backwardRowidx = srcs
         backwardColptr = b_ind
     }
-    
+
     public init(fromCSV fileName: String) {
         let furl = URL(fileURLWithPath: fileName)
         var edges = [Edge<T>]()
@@ -63,10 +62,10 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
         } catch {
             print("error processing file \(fileName): \(error)")
         }
-        
+
         self.init(fromEdgeList: edges)
     }
-    
+
     public init(fromBinaryFile fileName: String) {
         let file = URL(fileURLWithPath: fileName)
         let fileHandle = try! FileHandle(forReadingFrom: file)
@@ -104,7 +103,7 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
             return [T](bufferPointer.lazy.map { T($0.bigEndian) })
         })
     }
-    
+
     public func write(toBinaryFile fileName: String) {
         let file = URL(fileURLWithPath: fileName)
         // There should be a way to make FileHandle(forWritingAtPath) create the file but I don't know it
@@ -148,32 +147,31 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
             }
             fileHandle.write(bRowData)
         }
-
     }
-    
+
     public var outDegrees: [T] {
         return (1 ..< colptr.count).map { T(colptr[$0] - colptr[$0 - 1]) }
     }
-    
+
     public var inDegrees: [T] {
         return (1 ..< backwardColptr.count).map { T(backwardColptr[$0] - backwardColptr[$0 - 1]) }
     }
 
     public var degrees: [T] {
-        return zip(outDegrees,inDegrees).map() {$0 + $1}
+        return zip(outDegrees, inDegrees).map { $0 + $1 }
     }
-    
+
     private func backwardVecRange(_ s: Array<T>.Index) -> CountableRange<Array<T>.Index> {
         let rStart = backwardColptr[s]
         let rEnd = backwardColptr[s + 1]
         return rStart ..< rEnd
     }
-    
+
     public func inNeighbors(of vertex: T) -> ArraySlice<T> {
         let range = backwardVecRange(Array<T>.Index(vertex))
         return backwardRowidx[range]
     }
-    
+
     func neighbors(of vertex: T) -> ArraySlice<T> {
         return inNeighbors(of: vertex) + outNeighbors(of: vertex)
     }
@@ -181,7 +179,7 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
     func inDegree(of vertex: T) -> Int {
         return backwardColptr[Int(vertex) + 1] - backwardColptr[Int(vertex)]
     }
-    
+
     func degree(of vertex: T) -> Int {
         return inDegree(of: vertex) + outDegree(of: vertex)
     }

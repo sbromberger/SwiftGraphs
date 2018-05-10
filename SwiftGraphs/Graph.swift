@@ -135,12 +135,12 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
             fileHandle.write(rowData)
         }
     }
-    
+
     public func inNeighbors(of vertex: T) -> ArraySlice<T> { return outNeighbors(of: vertex) }
     public func neighbors(of vertex: T) -> ArraySlice<T> { return outNeighbors(of: vertex) }
 
-    public func inDegree(of vertex: T) -> Int { return outDegree(of: vertex)}
-    public func degree(of vertex: T) -> Int { return outDegree(of: vertex)}
+    public func inDegree(of vertex: T) -> Int { return outDegree(of: vertex) }
+    public func degree(of vertex: T) -> Int { return outDegree(of: vertex) }
 }
 
 extension Graph: CustomStringConvertible {

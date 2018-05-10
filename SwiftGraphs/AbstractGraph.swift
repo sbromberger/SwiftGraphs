@@ -18,8 +18,6 @@ protocol AbstractGraph {
     func hasEdge(_ edge: Edge<T>) -> Bool
     func degree(of vertex: T) -> Int
     func neighbors(of vertex: T) -> ArraySlice<T>
-    func inNeighbors(of vertex: T) -> ArraySlice<T>
-    func outNeighbors(of vertex: T) -> ArraySlice<T>
 }
 
 extension AbstractGraph {

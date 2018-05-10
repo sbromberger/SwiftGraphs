@@ -10,6 +10,10 @@ protocol SimpleGraph: AbstractGraph {
     associatedtype T
     var rowidx: Array<T> { get }
     var colptr: Array<Array<T>.Index> { get }
+    func inDegree(of vertex: T) -> Int
+    func outDegree(of vertex: T) -> Int
+    func inNeighbors(of vertex: T) -> ArraySlice<T>
+    func outNeighbors(of vertex: T) -> ArraySlice<T>
 }
 
 extension SimpleGraph {
@@ -31,7 +35,6 @@ extension SimpleGraph {
         let range = vecRange(Array<T>.Index(vertex))
         return rowidx[range]
     }
-
 
     public var edges: [Edge<T>] {
         var edgeList = [Edge<T>]()
