@@ -15,11 +15,9 @@ import Dispatch
 // let edge2 = Edge(1, 2)
 
 let ms = 1_000_000.0
-extension Double
-{
-    func truncate(places : Int)-> Double
-    {
-        return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
+extension Double {
+    func truncate(places: Int) -> Double {
+        return Double(floor(pow(10.0, Double(places)) * self) / pow(10.0, Double(places)))
     }
 }
 
@@ -29,18 +27,18 @@ print(g.degrees)
 let zz = g.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
 print("dsp = \(zz)")
 
-//for i in 0 ..< g.nv {
+// for i in 0 ..< g.nv {
 //    print("degree of \(i) = \(g.degree(of: i))")
-//}
+// }
 //
 //
 //
-//let edges2 :[Edge<UInt8>] = [Edge(8,9), Edge(9, 10), Edge(8, 10)]
-//let ccg = Graph<UInt8>(fromEdgeList: edges + edges2)
+// let edges2 :[Edge<UInt8>] = [Edge(8,9), Edge(9, 10), Edge(8, 10)]
+// let ccg = Graph<UInt8>(fromEdgeList: edges + edges2)
 //
-//let cc = ccg.connectedComponents
-//print(cc)
-//print("connected? \(ccg.isConnected)")
+// let cc = ccg.connectedComponents
+// print(cc)
+// print("connected? \(ccg.isConnected)")
 //
 var start = DispatchTime.now()
 let h = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
@@ -50,17 +48,17 @@ print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds)
 ////
 print(h)
 print("h.foo(5) = \(h.foo(5))")
-//print("Degree histogram of h:")
-//start = DispatchTime.now()
-//print(h.degreeHistogram.sorted(by:<))
-//end = DispatchTime.now()
-//print("Histogram took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
-//print("Density = \(h.density)")
+// print("Degree histogram of h:")
+// start = DispatchTime.now()
+// print(h.degreeHistogram.sorted(by:<))
+// end = DispatchTime.now()
+// print("Histogram took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+// print("Density = \(h.density)")
 //
 var dtimes = [Double]()
 for i in 1 ... 10 {
     start = DispatchTime.now()
-//let ds = h.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
+    // let ds = h.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
     let ds = h.dijkstraShortestPaths(from: 1)
     end = DispatchTime.now()
     let timediff = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / ms
@@ -71,9 +69,8 @@ for i in 1 ... 10 {
     print("\(i): curr: \(timediff.truncate(places: 3)), min: \(dtimes.min()!.truncate(places: 3)), max: \(dtimes.max()!.truncate(places: 3)), avg: \(timeAvg.truncate(places: 3)), std: \(timeStd.truncate(places: 3))")
 }
 
-//print("ds.pathCounts[0..<10] = \(ds.pathCounts[0..<10])")
-//print("pathCounts sum = \(ds.pathCounts.reduce(0, +))")
-
+// print("ds.pathCounts[0..<10] = \(ds.pathCounts[0..<10])")
+// print("pathCounts sum = \(ds.pathCounts.reduce(0, +))")
 
 exit(0)
 
@@ -95,11 +92,10 @@ for i in 1 ... 100_000 {
     let sumOfSquaredAvgDiff = times.map { pow($0 - timeAvg, 2.0) }.reduce(0, +)
     let timeStd = sqrt(sumOfSquaredAvgDiff / Double(times.count - 1))
     print("\(i): curr: \(timediff.truncate(places: 3)), min: \(times.min()!.truncate(places: 3)), max: \(times.max()!.truncate(places: 3)), avg: \(timeAvg.truncate(places: 3)), std: \(timeStd.truncate(places: 3))")
-
 }
+
 print("FINAL")
 let timeAvg = times.reduce(0, +) / Double(times.count)
 let sumOfSquaredAvgDiff = times.map { pow($0 - timeAvg, 2.0) }.reduce(0, +)
 let timeStd = sqrt(sumOfSquaredAvgDiff / Double(times.count - 1))
 print("Times: min: \(times.min()!), max: \(times.max()!), avg: \(timeAvg), std: \(timeStd)")
-

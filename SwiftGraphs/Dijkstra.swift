@@ -23,8 +23,8 @@ extension DistVertex: Comparable {
     static func < (lhs: DistVertex<T>, rhs: DistVertex<T>) -> Bool {
         return lhs.distance < rhs.distance
     }
-    
-    static func ==(lhs: DistVertex<T>, rhs: DistVertex<T>) -> Bool {
+
+    static func == (lhs: DistVertex<T>, rhs: DistVertex<T>) -> Bool {
         return lhs.distance == rhs.distance && lhs.vertex == rhs.vertex
     }
 }
@@ -37,7 +37,7 @@ extension AbstractGraph {
         var preds = [[T]]()
         preds.reserveCapacity(numVertices)
         var closestVertices = [T]()
-        for _ in 0..<numVertices {
+        for _ in 0 ..< numVertices {
             let p = Array<T>()
             preds.append(p)
         }
@@ -50,9 +50,7 @@ extension AbstractGraph {
         pathCounts[Int(sourceVertex)] = 1
         H.push(DistVertex(distance: 0, vertex: sourceVertex))
         dists.withUnsafeMutableBufferPointer { dists in
-            while let currentDistVertex = H.pop() {
-//                let currentDistVertex = H.pop()!
-                let vertex = currentDistVertex.vertex
+            while let vertex = H.pop()?.vertex {
                 let intVertex = Int(vertex)
                 if trackVertices {
                     closestVertices.append(vertex)
@@ -63,15 +61,15 @@ extension AbstractGraph {
                     let alt = (dists[intVertex] == Double.infinity) ? Double.infinity : dists[intVertex] + distFromMatrix
                     if !visited[intNeighbor] {
                         visited[intNeighbor] = true
-                        
+
                         dists[intNeighbor] = alt
                         parents[intNeighbor] = vertex
                         pathCounts[intNeighbor] += pathCounts[intVertex]
-                        
+
                         if withPaths {
                             preds[intNeighbor] = [vertex]
                         }
-                        
+
                         H.push(DistVertex(distance: alt, vertex: neighbor))
                     } else {
                         if alt < dists[intNeighbor] {
@@ -98,11 +96,11 @@ extension AbstractGraph {
                 }
             }
         }
-        
+
         pathCounts[Int(sourceVertex)] = 1
         parents[Int(sourceVertex)] = 0
         preds[Int(sourceVertex)] = []
-        
+
         return DijkstraState(parents: parents, dists: dists, predecessors: preds, pathCounts: pathCounts, closestVertices: closestVertices)
     }
 }

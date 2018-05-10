@@ -1,6 +1,6 @@
-final class UnsafeBitArray<StorageElement: FixedWidthInteger> : RandomAccessCollection, MutableCollection {
+final class UnsafeBitArray<StorageElement: FixedWidthInteger>: RandomAccessCollection, MutableCollection {
     typealias Element = Bool
-    
+
     let storage: UnsafeMutableBufferPointer<StorageElement>
     init(repeating element: Bool, count: Int) {
         let size = (count + StorageElement.bitWidth - 1) / StorageElement.bitWidth
@@ -16,10 +16,10 @@ final class UnsafeBitArray<StorageElement: FixedWidthInteger> : RandomAccessColl
             storage.initialize(repeating: 0)
         }
     }
-    
+
     var startIndex: Int { return 0 }
     var endIndex: Int { return storage.count &* StorageElement.bitWidth }
-    
+
     private func getBlockAndOffset(of bitIndex: Int) -> (Int, Int) {
         return (bitIndex / StorageElement.bitWidth, bitIndex % StorageElement.bitWidth)
     }
@@ -36,7 +36,7 @@ final class UnsafeBitArray<StorageElement: FixedWidthInteger> : RandomAccessColl
             }
         }
     }
-        
+
     deinit {
         storage.deallocate()
     }
@@ -45,28 +45,28 @@ final class UnsafeBitArray<StorageElement: FixedWidthInteger> : RandomAccessColl
 struct UnsafeArray<Element> {
     var count: Int
     let storage: UnsafeMutablePointer<Element>
-    
+
     init(capacity: Int) {
         storage = UnsafeMutablePointer.allocate(capacity: capacity)
         count = 0
     }
-    
+
     init(repeating element: Element, count: Int) {
         storage = UnsafeMutablePointer.allocate(capacity: count)
         storage.initialize(repeating: element, count: count)
         self.count = count
     }
-    
+
     mutating func append(_ element: Element) {
         storage.advanced(by: count).initialize(to: element)
         count = count &+ 1
     }
-    
+
     mutating func removeAll() {
         storage.deinitialize(count: count)
         count = 0
     }
-    
+
     subscript(index: Int) -> Element {
         get {
             return storage.advanced(by: index).pointee
@@ -75,14 +75,14 @@ struct UnsafeArray<Element> {
             storage.advanced(by: index).pointee = newValue
         }
     }
-    
+
     func deallocate() {
         storage.deinitialize(count: count)
         storage.deallocate()
     }
 }
 
-extension UnsafeArray : RandomAccessCollection, MutableCollection {
+extension UnsafeArray: RandomAccessCollection, MutableCollection {
     var startIndex: Int { return 0 }
     var endIndex: Int { return count }
 }
