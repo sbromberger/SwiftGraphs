@@ -24,6 +24,12 @@ extension Edge: CustomStringConvertible {
     }
 }
 
+extension Edge: Hashable {
+    var HashValue: Int {
+        return [Int(src) << Int.bitWidth + Int(dst)].hashValue
+    }
+}
+
 extension Edge: Comparable {
     public static func == (lhs: Edge, rhs: Edge) -> Bool {
         return lhs.src == rhs.src && lhs.dst == rhs.dst

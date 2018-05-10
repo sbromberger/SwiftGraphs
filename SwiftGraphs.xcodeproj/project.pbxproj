@@ -15,6 +15,14 @@
 		3B69AC8820A3D5F100200215 /* SimpleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8720A3D5F100200215 /* SimpleGraph.swift */; };
 		3B69AC8A20A3D63600200215 /* AbstractGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8920A3D63600200215 /* AbstractGraph.swift */; };
 		3B69AC8C20A4B5E500200215 /* DiGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8B20A4B5E500200215 /* DiGraph.swift */; };
+		3BD9918C20A4DEBF00EA6C40 /* Dijkstra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B32A32A20A27C3D00B446F2 /* Dijkstra.swift */; };
+		3BD9918D20A4DEC500EA6C40 /* PriorityQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B32A32C20A28A9A00B446F2 /* PriorityQueue.swift */; };
+		3BD9918E20A4DEC700EA6C40 /* UnsafeArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE8259A209EB32200A9A9F8 /* UnsafeArray.swift */; };
+		3BD9918F20A4DECB00EA6C40 /* RandomAccessCollectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B341907209AAD32009A187D /* RandomAccessCollectionExtensions.swift */; };
+		3BD9919020A4DECE00EA6C40 /* LineReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4257A8209A1E40008116FC /* LineReader.swift */; };
+		3BD9919120A4DED500EA6C40 /* DiGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8B20A4B5E500200215 /* DiGraph.swift */; };
+		3BD9919220A4DED700EA6C40 /* SimpleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8720A3D5F100200215 /* SimpleGraph.swift */; };
+		3BD9919320A4DEDA00EA6C40 /* AbstractGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8920A3D63600200215 /* AbstractGraph.swift */; };
 		5DE8259B209EB32200A9A9F8 /* UnsafeArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE8259A209EB32200A9A9F8 /* UnsafeArray.swift */; };
 		5DEFB50D20997B2F00711BDC /* SwiftGraphsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEFB50C20997B2F00711BDC /* SwiftGraphsTests.swift */; };
 		5DEFB51320997BDD00711BDC /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64A209975E400CD8CA6 /* Edge.swift */; };
@@ -208,8 +216,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DEFB51420997BDD00711BDC /* Graph.swift in Sources */,
+				3BD9919320A4DEDA00EA6C40 /* AbstractGraph.swift in Sources */,
+				3BD9918C20A4DEBF00EA6C40 /* Dijkstra.swift in Sources */,
+				3BD9919220A4DED700EA6C40 /* SimpleGraph.swift in Sources */,
+				3BD9918F20A4DECB00EA6C40 /* RandomAccessCollectionExtensions.swift in Sources */,
+				3BD9918D20A4DEC500EA6C40 /* PriorityQueue.swift in Sources */,
+				3BD9918E20A4DEC700EA6C40 /* UnsafeArray.swift in Sources */,
 				5DEFB50D20997B2F00711BDC /* SwiftGraphsTests.swift in Sources */,
+				3BD9919020A4DECE00EA6C40 /* LineReader.swift in Sources */,
 				5DEFB51320997BDD00711BDC /* Edge.swift in Sources */,
+				3BD9919120A4DED500EA6C40 /* DiGraph.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
