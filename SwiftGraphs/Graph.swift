@@ -16,18 +16,176 @@ protocol AbstractGraph {
     func outNeighbors(of vertex: T) -> ArraySlice<T>
 }
 
-public struct Graph<T: FixedWidthInteger> : AbstractGraph where T.Stride: SignedInteger {
+extension AbstractGraph {
+    public var degreeHistogram: [T: Int] {
+        var degHist = [T:Int]()
+        for d in degrees {
+            degHist[d, default: 0] += 1
+        }
+        return degHist
+    }
+    
+    public var isConnected : Bool {
+        return ne + 1 >= nv && connectedComponents.count == 1
+    }
+
+    public var connectedComponents : [[T]] {
+        var label = [T](repeating: 0, count: Int(nv))
+        for u in vertices {
+            if label[Int(u)] == 0 {
+                label[Int(u)] = u
+                var Q = [T]()
+                Q.append(u)
+                if let src = Q.popLast() {
+                    for vertex in neighbors(of: src) {
+                        if label[Int(vertex)] == 0 {
+                            Q.append(vertex)
+                            label[Int(vertex)] = u
+                        }
+                    }
+                }
+            }
+        }
+        var componentDict = [T: T]()
+        var cVec = [[T]]()
+        var i: T = 0
+        for (v, l) in label.enumerated() {
+            let optIndex  = componentDict[l]
+            if optIndex == nil {
+                componentDict.updateValue(i, forKey: l)
+            }
+            let index = optIndex ?? i
+            
+            if cVec.count > index {
+                cVec[Int(index)].append(T(v))
+            } else {
+                cVec.append([T(v)])
+                i += 1
+            }
+        }
+        return cVec
+    }
+
+    public func BFS(from sourceVertex:T) -> [T] {
+        let numVertices = Int(nv)
+        var vertLevel = Array<T>(repeating: T.max, count: numVertices)
+        var nLevel: T = 1
+        vertLevel.withUnsafeMutableBufferPointer { vertLevel in
+            let visited = UnsafeBitArray<Int>(repeating: false, count: numVertices)
+            var curLevel = UnsafeArray<T>(capacity: numVertices)
+            var nextLevel = UnsafeArray<T>(capacity: numVertices)
+            defer {
+                curLevel.deallocate()
+                nextLevel.deallocate()
+            }
+            
+            visited[Int(sourceVertex)] = true
+            vertLevel[Int(sourceVertex)] = 0
+            curLevel.append(sourceVertex)
+            
+            while !curLevel.isEmpty {
+                for vertex in curLevel {
+                    for neighbor in neighbors(of: vertex) {
+                        if !visited[Int(neighbor)] {
+                            visited[Int(neighbor)] = true
+                            nextLevel.append(neighbor)
+                            vertLevel[Int(neighbor)] = nLevel
+                        }
+                    }
+                }
+                nLevel += 1
+                curLevel.removeAll()
+                (curLevel, nextLevel) = (nextLevel, curLevel)
+                curLevel.sort()
+            }
+        }
+        return vertLevel
+    }
+}
+
+protocol AbstractSimpleGraph : AbstractGraph {
+    associatedtype T
+    var rowidx: Array<T> { get }
+    var colptr: Array<Array<T>.Index> { get }
+}
+
+extension AbstractSimpleGraph {
+    public var nv: T { return T((colptr.count - 1)) }
+    
+    public var vertices: CountableRange<T> {
+        return (0 as T)..<nv
+    }
+
+    func foo(_ foo: Int) -> Int { return foo * 2 }
+    
+    private func vecRange(_ s: Array<T>.Index) -> CountableRange<Array<T>.Index> {
+        let rStart = colptr[s]
+        let rEnd = colptr[s + 1]
+        return rStart ..< rEnd
+    }
+    
+    public func neighbors(of vertex: T) -> ArraySlice<T> {
+        let range = vecRange(Array<T>.Index(vertex))
+        return rowidx[range]
+    }
+    
+    public func inNeighbors(of vertex: T) -> ArraySlice<T> { return neighbors(of: vertex) }
+    public func outNeighbors(of vertex: T) -> ArraySlice<T> { return neighbors(of: vertex) }
+
+    public var edges: [Edge<T>] {
+        var edgeList = [Edge<T>]()
+        edgeList.reserveCapacity(ne)
+        for src in vertices {
+            for dst in neighbors(of: src) {
+                edgeList.append(Edge<T>(src, dst))
+            }
+        }
+        return edgeList
+    }
+    
+    public func hasEdge(_ src: T, _ dst: T) -> Bool {
+        return neighbors(of: src).searchSortedIndex(val: dst).1
+    }
+
+    public func hasEdge(_ edge: Edge<T>) -> Bool {
+        return hasEdge(edge.src, edge.dst)
+    }
+
+    public var degrees: [T] {
+        return (1 ..< colptr.count).map { T(colptr[$0] - colptr[$0 - 1]) }
+    }
+    
+    public func degree(of vertex: T) -> Int {
+        return colptr[Int(vertex) + 1] - colptr[Int(vertex)]
+    }
+    
+}
+
+//public struct DiGraph<T: FixedWidthInteger> : AbstractGraph where T.Stride : SignedInteger {
+//    let rowidx: Array<T>
+//    let colptr: Array<Array<T>.Index>
+//    let isDirected: Bool = true
+//    var eltype: Any.Type { return T.self }
+//
+//    public var nv: T { return T((colptr.count - 1)) }
+//    public var ne: Int { return rowidx.count }
+//
+//    public var vertices: CountableRange<T> {
+//        return (0 as T)..<nv
+//    }
+//
+//    public var density: Double {
+//
+//    }
+//}
+public struct Graph<T: FixedWidthInteger> : AbstractSimpleGraph where T.Stride: SignedInteger {
     let rowidx: Array<T>
     let colptr: Array<Array<T>.Index>
     let isDirected: Bool = false
     var eltype: Any.Type { return T.self }
 
-    public var nv: T { return T((colptr.count - 1)) }
     public var ne: Int { return rowidx.count / 2 }
     
-    public var vertices: CountableRange<T> {
-        return (0 as T)..<nv
-    }
 
     public var density: Double {
         return Double(ne) / Double(Int(nv)) / Double(Int(nv-1)) * 2
@@ -157,138 +315,6 @@ public struct Graph<T: FixedWidthInteger> : AbstractGraph where T.Stride: Signed
         }
     }
 
-    private func vecRange(_ s: Array<T>.Index) -> CountableRange<Array<T>.Index> {
-        let rStart = colptr[s]
-        let rEnd = colptr[s + 1]
-        return rStart ..< rEnd
-    }
-
-    public func neighbors(of vertex: T) -> ArraySlice<T> {
-        let range = vecRange(Array<T>.Index(vertex))
-        return rowidx[range]
-    }
-    
-    public func inNeighbors(of vertex: T) -> ArraySlice<T> { return neighbors(of: vertex) }
-    public func outNeighbors(of vertex: T) -> ArraySlice<T> { return neighbors(of: vertex) }
-    
-    public var edges: [Edge<T>] {
-        var edgeList = [Edge<T>]()
-        edgeList.reserveCapacity(ne)
-        for src in vertices {
-            for dst in neighbors(of: src) {
-                edgeList.append(Edge<T>(src, dst))
-            }
-        }
-        return edgeList
-    }
-
-    public func hasEdge(_ edge: Edge<T>) -> Bool {
-        let (src, dst) = (edge.src, edge.dst)
-
-        return hasEdge(src, dst)
-    }
-
-    public func hasEdge(_ src: T, _ dst: T) -> Bool {
-        return neighbors(of: src).searchSortedIndex(val: dst).1
-    }
-
-    public var degrees: [T] {
-        return (1 ..< colptr.count).map { T(colptr[$0] - colptr[$0 - 1]) }
-    }
-
-    public func degree(of vertex: Int) -> Int {
-        return colptr[vertex + 1] - colptr[vertex]
-    }
-
-    public var degreeHistogram: [T: Int] {
-        var degHist = [T:Int]()
-        for d in degrees {
-            degHist[d, default: 0] += 1
-        }
-        return degHist
-    }
-    
-    public var connectedComponents : [[T]] {
-        var label = [T](repeating: 0, count: Int(nv))
-        for u in vertices {
-            if label[Int(u)] == 0 {
-                label[Int(u)] = u
-                var Q = [T]()
-                Q.append(u)
-                if let src = Q.popLast() {
-                    for vertex in neighbors(of: src) {
-                        if label[Int(vertex)] == 0 {
-                            Q.append(vertex)
-                            label[Int(vertex)] = u
-                        }
-                    }
-                }
-            }
-        }
-        var componentDict = [T: T]()
-        var cVec = [[T]]()
-        var i: T = 0
-        for (v, l) in label.enumerated() {
-            let optIndex  = componentDict[l]
-            if optIndex == nil {
-                componentDict.updateValue(i, forKey: l)
-            }
-            let index = optIndex ?? i
-            
-            if cVec.count > index {
-                cVec[Int(index)].append(T(v))
-            } else {
-                cVec.append([T(v)])
-                i += 1
-            }
-        }
-        
-        return cVec
-    }
-
-    public var isConnected : Bool {
-        return ne + 1 >= nv && connectedComponents.count == 1
-    }
-    
-    public func degree(of vertex: T) -> Int {
-        return degree(of: Int(vertex))
-    }
-
-    public func BFS(from sourceVertex:T) -> [T] {
-        let numVertices = Int(nv)
-        var vertLevel = Array<T>(repeating: T.max, count: numVertices)
-        var nLevel: T = 1
-        vertLevel.withUnsafeMutableBufferPointer { vertLevel in
-            let visited = UnsafeBitArray<Int>(repeating: false, count: numVertices)
-            var curLevel = UnsafeArray<T>(capacity: numVertices)
-            var nextLevel = UnsafeArray<T>(capacity: numVertices)
-            defer {
-                curLevel.deallocate()
-                nextLevel.deallocate()
-            }
-            
-            visited[Int(sourceVertex)] = true
-            vertLevel[Int(sourceVertex)] = 0
-            curLevel.append(sourceVertex)
-            
-            while !curLevel.isEmpty {
-                for vertex in curLevel {
-                    for neighbor in neighbors(of: vertex) {
-                        if !visited[Int(neighbor)] {
-                            visited[Int(neighbor)] = true
-                            nextLevel.append(neighbor)
-                            vertLevel[Int(neighbor)] = nLevel
-                        }
-                    }
-                }
-                nLevel += 1
-                curLevel.removeAll()
-                (curLevel, nextLevel) = (nextLevel, curLevel)
-                curLevel.sort()
-            }
-        }
-        return vertLevel
-    }
 }
 
 extension Graph: CustomStringConvertible {
