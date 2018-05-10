@@ -14,6 +14,7 @@
 		3B4257A9209A1E40008116FC /* LineReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4257A8209A1E40008116FC /* LineReader.swift */; };
 		3B69AC8820A3D5F100200215 /* SimpleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8720A3D5F100200215 /* SimpleGraph.swift */; };
 		3B69AC8A20A3D63600200215 /* AbstractGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8920A3D63600200215 /* AbstractGraph.swift */; };
+		3B69AC8C20A4B5E500200215 /* DiGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8B20A4B5E500200215 /* DiGraph.swift */; };
 		5DE8259B209EB32200A9A9F8 /* UnsafeArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE8259A209EB32200A9A9F8 /* UnsafeArray.swift */; };
 		5DEFB50D20997B2F00711BDC /* SwiftGraphsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEFB50C20997B2F00711BDC /* SwiftGraphsTests.swift */; };
 		5DEFB51320997BDD00711BDC /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64A209975E400CD8CA6 /* Edge.swift */; };
@@ -43,6 +44,7 @@
 		3B4257A8209A1E40008116FC /* LineReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineReader.swift; sourceTree = "<group>"; };
 		3B69AC8720A3D5F100200215 /* SimpleGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleGraph.swift; sourceTree = "<group>"; };
 		3B69AC8920A3D63600200215 /* AbstractGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractGraph.swift; sourceTree = "<group>"; };
+		3B69AC8B20A4B5E500200215 /* DiGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiGraph.swift; sourceTree = "<group>"; };
 		5DE8259A209EB32200A9A9F8 /* UnsafeArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsafeArray.swift; sourceTree = "<group>"; };
 		5DEFB50A20997B2F00711BDC /* SwiftGraphsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftGraphsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEFB50C20997B2F00711BDC /* SwiftGraphsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftGraphsTests.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				3B4257A8209A1E40008116FC /* LineReader.swift */,
 				5DFDE64A209975E400CD8CA6 /* Edge.swift */,
 				5DFDE64B209975E400CD8CA6 /* Graph.swift */,
+				3B69AC8B20A4B5E500200215 /* DiGraph.swift */,
 				3B69AC8720A3D5F100200215 /* SimpleGraph.swift */,
 				3B69AC8920A3D63600200215 /* AbstractGraph.swift */,
 			);
@@ -215,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DFDE64E209975E400CD8CA6 /* Graph.swift in Sources */,
+				3B69AC8C20A4B5E500200215 /* DiGraph.swift in Sources */,
 				3B69AC8A20A3D63600200215 /* AbstractGraph.swift in Sources */,
 				3B4257A9209A1E40008116FC /* LineReader.swift in Sources */,
 				3B69AC8820A3D5F100200215 /* SimpleGraph.swift in Sources */,

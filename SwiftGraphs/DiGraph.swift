@@ -1,28 +1,28 @@
 import Foundation
 
-public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInteger {
+public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInteger {
     let rowidx: Array<T>
     let colptr: Array<Array<T>.Index>
-    let isDirected: Bool = false
+    let backwardRowidx: Array<T>
+    let backwardColptr: Array<Array<T>.Index>
+    
+    let isDirected: Bool = true
     var eltype: Any.Type { return T.self }
-
-    public var ne: Int { return rowidx.count / 2 }
-
+    
+    public var ne: Int { return rowidx.count }
+    
     public var density: Double {
-        return Double(ne) / Double(Int(nv)) / Double(Int(nv - 1)) * 2
+        return Double(ne) / Double(Int(nv)) / Double(Int(nv - 1))
     }
-
-    public init(fromEdgeList edgeList: [Edge<T>]) {
-        let orderedEdgeList = edgeList.map { $0.ordered }
-        let reversedEdgeList = orderedEdgeList.map { $0.reverse }
-        let allEdges = (orderedEdgeList + reversedEdgeList).sorted()
-
+    
+    public init(fromEdgeList edges: [Edge<T>]) {
+        let allEdges = edges.sorted()
         var numVertices: T = 0
         var srcs = [T]()
         var dsts = [T]()
         srcs.reserveCapacity(allEdges.count)
         dsts.reserveCapacity(allEdges.count)
-
+        
         for edge in allEdges {
             srcs.append(edge.src)
             dsts.append(edge.dst)
@@ -35,13 +35,19 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
         }
         numVertices += 1
         var f_ind = [Array<T>.Index]()
+        var b_ind = [Array<T>.Index]()
         for v in (0 as T) ... numVertices {
             f_ind.append(srcs.searchSortedIndex(val: v).0)
+            b_ind.append(dsts.searchSortedIndex(val: v).0)
         }
+        
+        
         rowidx = dsts
         colptr = f_ind
+        backwardRowidx = srcs
+        backwardColptr = b_ind
     }
-
+    
     public init(fromCSV fileName: String) {
         let furl = URL(fileURLWithPath: fileName)
         var edges = [Edge<T>]()
@@ -57,41 +63,16 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
         } catch {
             print("error processing file \(fileName): \(error)")
         }
-
+        
         self.init(fromEdgeList: edges)
     }
-
-    public init(fromVecFile fileName: String) {
-        var colptrRead = [Int]()
-        var rowindRead = [T]()
-        var inColPtr = true
-
-        guard let reader = LineReader(path: fileName) else {
-            fatalError("error opening file \(fileName)")
-        }
-        for var line in reader {
-            line.removeLast()
-            if line.hasPrefix("-----") {
-                inColPtr = false
-            } else {
-                let n = Int(line)!
-                if inColPtr {
-                    colptrRead.append(n)
-                } else {
-                    rowindRead.append(T(n))
-                }
-            }
-        }
-        rowidx = rowindRead
-        colptr = colptrRead
-    }
-
+    
     public init(fromBinaryFile fileName: String) {
         let file = URL(fileURLWithPath: fileName)
         let fileHandle = try! FileHandle(forReadingFrom: file)
         let magic = fileHandle.readData(ofLength: 4)
-        guard magic.elementsEqual("GRPH".utf8) else {
-            fatalError("\(file) was not a graph file")
+        guard magic.elementsEqual("DGPH".utf8) else {
+            fatalError("\(file) was not a digraph file")
         }
         let colSize = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size).withUnsafeBytes { (ptr: UnsafePointer<UInt32>) -> Int in
             return Int(ptr.pointee.bigEndian)
@@ -107,14 +88,29 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
             let bufferPointer = UnsafeBufferPointer(start: ptr, count: rowSize)
             return [T](bufferPointer.lazy.map { T($0.bigEndian) })
         })
-    }
 
+        let bColSize = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size).withUnsafeBytes { (ptr: UnsafePointer<UInt32>) -> Int in
+            return Int(ptr.pointee.bigEndian)
+        }
+        backwardColptr = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size * bColSize).withUnsafeBytes({ (ptr: UnsafePointer<UInt32>) -> [Int] in
+            let bufferPointer = UnsafeBufferPointer(start: ptr, count: bColSize)
+            return [Int](bufferPointer.lazy.map { Int($0.bigEndian) })
+        })
+        let bRowSize = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size).withUnsafeBytes { (ptr: UnsafePointer<UInt32>) -> Int in
+            return Int(ptr.pointee.bigEndian)
+        }
+        backwardRowidx = fileHandle.readData(ofLength: MemoryLayout<UInt32>.size * bRowSize).withUnsafeBytes({ (ptr: UnsafePointer<UInt32>) -> [T] in
+            let bufferPointer = UnsafeBufferPointer(start: ptr, count: bRowSize)
+            return [T](bufferPointer.lazy.map { T($0.bigEndian) })
+        })
+    }
+    
     public func write(toBinaryFile fileName: String) {
         let file = URL(fileURLWithPath: fileName)
         // There should be a way to make FileHandle(forWritingAtPath) create the file but I don't know it
         try! Data().write(to: file)
         let fileHandle = try! FileHandle(forWritingTo: file)
-        let magic = Data("GRPH".utf8)
+        let magic = Data("DGPH".utf8)
         fileHandle.write(magic)
         do {
             var colData = Data(repeating: 0, count: MemoryLayout<UInt32>.size * (colptr.count + 1))
@@ -134,20 +130,68 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
             }
             fileHandle.write(rowData)
         }
+        do {
+            var bColData = Data(repeating: 0, count: MemoryLayout<UInt32>.size * (backwardColptr.count + 1))
+            bColData.withUnsafeMutableBytes { (ptr: UnsafeMutablePointer<UInt32>) -> Void in
+                ptr.initialize(to: UInt32(backwardColptr.count).bigEndian)
+                let bufferPointer = UnsafeMutableBufferPointer(start: ptr.successor(), count: backwardColptr.count)
+                _ = bufferPointer.initialize(from: backwardColptr.lazy.map { UInt32($0).bigEndian })
+            }
+            fileHandle.write(bColData)
+        }
+        do {
+            var bRowData = Data(repeating: 0, count: MemoryLayout<UInt32>.size * (backwardRowidx.count + 1))
+            bRowData.withUnsafeMutableBytes { (ptr: UnsafeMutablePointer<UInt32>) -> Void in
+                ptr.initialize(to: UInt32(backwardRowidx.count).bigEndian)
+                let bufferPointer = UnsafeMutableBufferPointer(start: ptr.successor(), count: backwardRowidx.count)
+                _ = bufferPointer.initialize(from: backwardRowidx.lazy.map { UInt32($0).bigEndian })
+            }
+            fileHandle.write(bRowData)
+        }
+
     }
     
-    public func inNeighbors(of vertex: T) -> ArraySlice<T> { return outNeighbors(of: vertex) }
-    public func neighbors(of vertex: T) -> ArraySlice<T> { return outNeighbors(of: vertex) }
+    public var outDegrees: [T] {
+        return (1 ..< colptr.count).map { T(colptr[$0] - colptr[$0 - 1]) }
+    }
+    
+    public var inDegrees: [T] {
+        return (1 ..< backwardColptr.count).map { T(backwardColptr[$0] - backwardColptr[$0 - 1]) }
+    }
 
-    public func inDegree(of vertex: T) -> Int { return outDegree(of: vertex)}
-    public func degree(of vertex: T) -> Int { return outDegree(of: vertex)}
-}
+    public var degrees: [T] {
+        return zip(outDegrees,inDegrees).map() {$0 + $1}
+    }
+    
+    private func backwardVecRange(_ s: Array<T>.Index) -> CountableRange<Array<T>.Index> {
+        let rStart = backwardColptr[s]
+        let rEnd = backwardColptr[s + 1]
+        return rStart ..< rEnd
+    }
+    
+    public func inNeighbors(of vertex: T) -> ArraySlice<T> {
+        let range = backwardVecRange(Array<T>.Index(vertex))
+        return backwardRowidx[range]
+    }
+    
+    func neighbors(of vertex: T) -> ArraySlice<T> {
+        return inNeighbors(of: vertex) + outNeighbors(of: vertex)
+    }
 
-extension Graph: CustomStringConvertible {
-    public var description: String {
-        return "{\(nv), \(ne)} Graph"
+    func inDegree(of vertex: T) -> Int {
+        return backwardColptr[Int(vertex) + 1] - backwardColptr[Int(vertex)]
+    }
+    
+    func degree(of vertex: T) -> Int {
+        return inDegree(of: vertex) + outDegree(of: vertex)
     }
 }
 
-extension Graph {
+extension DiGraph: CustomStringConvertible {
+    public var description: String {
+        return "{\(nv), \(ne)} Directed Graph"
+    }
+}
+
+extension DiGraph {
 }

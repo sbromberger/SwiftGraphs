@@ -27,13 +27,11 @@ extension SimpleGraph {
         return rStart ..< rEnd
     }
 
-    public func neighbors(of vertex: T) -> ArraySlice<T> {
+    public func outNeighbors(of vertex: T) -> ArraySlice<T> {
         let range = vecRange(Array<T>.Index(vertex))
         return rowidx[range]
     }
 
-    public func inNeighbors(of vertex: T) -> ArraySlice<T> { return neighbors(of: vertex) }
-    public func outNeighbors(of vertex: T) -> ArraySlice<T> { return neighbors(of: vertex) }
 
     public var edges: [Edge<T>] {
         var edgeList = [Edge<T>]()
@@ -58,7 +56,7 @@ extension SimpleGraph {
         return (1 ..< colptr.count).map { T(colptr[$0] - colptr[$0 - 1]) }
     }
 
-    public func degree(of vertex: T) -> Int {
+    public func outDegree(of vertex: T) -> Int {
         return colptr[Int(vertex) + 1] - colptr[Int(vertex)]
     }
 }

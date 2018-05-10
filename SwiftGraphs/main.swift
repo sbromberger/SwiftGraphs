@@ -23,13 +23,20 @@ extension Double {
 
 let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3)]
 let g = Graph<UInt8>(fromEdgeList: edges)
+let dg = DiGraph<UInt8>(fromEdgeList: edges)
+//print(g)
+print(dg)
+print("rowidx: \(dg.rowidx)")
+print("colptr: \(dg.colptr)")
 print(g.degrees)
+print(dg.degrees)
+for i in 0 ..< dg.nv {
+    print("degree of \(i) = \(dg.degree(of: i))")
+}
+
 let zz = g.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
 print("dsp = \(zz)")
-
-// for i in 0 ..< g.nv {
-//    print("degree of \(i) = \(g.degree(of: i))")
-// }
+exit(0)
 //
 //
 //
