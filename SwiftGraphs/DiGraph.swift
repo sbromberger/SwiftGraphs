@@ -16,16 +16,31 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
     }
 
     public init(fromEdgeList edges: [Edge<T>]) {
-        let allEdges = edges.sorted()
-        var numVertices: T = 0
-        var srcs = [T]()
-        var dsts = [T]()
-        srcs.reserveCapacity(allEdges.count)
-        dsts.reserveCapacity(allEdges.count)
+        let sortedForwardEdges = edges.sorted()
+        let sortedReverseEdges = (edges.map { $0.reverse }).sorted()
+        var allForwardEdges = [Edge<T>]([sortedForwardEdges[0]])
+        var allReverseEdges = [Edge<T>]([sortedReverseEdges[0]])
+        for newEdge in sortedForwardEdges[1...] {
+            if newEdge != allForwardEdges.last {
+                allForwardEdges.append(newEdge)
+            }
+        }
+        for newEdge in sortedReverseEdges[1...] {
+            if newEdge != allReverseEdges.last {
+                allReverseEdges.append(newEdge)
+            }
+        }
 
-        for edge in allEdges {
-            srcs.append(edge.src)
-            dsts.append(edge.dst)
+
+        var numVertices: T = 0
+        var forwardSrcs = [T]()
+        var forwardDsts = [T]()
+        forwardSrcs.reserveCapacity(allForwardEdges.count)
+        forwardDsts.reserveCapacity(allForwardEdges.count)
+
+        for edge in allForwardEdges {
+            forwardSrcs.append(edge.src)
+            forwardDsts.append(edge.dst)
             if numVertices < edge.src {
                 numVertices = edge.src
             }
@@ -33,17 +48,27 @@ public struct DiGraph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedI
                 numVertices = edge.dst
             }
         }
+        
+        var reverseSrcs = [T]()
+        var reverseDsts = [T]()
+        reverseSrcs.reserveCapacity(allReverseEdges.count)
+        reverseDsts.reserveCapacity(allReverseEdges.count)
+
+        for edge in allReverseEdges {
+            reverseSrcs.append(edge.src)
+            reverseDsts.append(edge.dst)
+        }
         numVertices += 1
         var f_ind = [Array<T>.Index]()
         var b_ind = [Array<T>.Index]()
         for v in (0 as T) ... numVertices {
-            f_ind.append(srcs.searchSortedIndex(val: v).0)
-            b_ind.append(dsts.searchSortedIndex(val: v).0)
+            f_ind.append(forwardSrcs.searchSortedIndex(val: v).0)
+            b_ind.append(reverseSrcs.searchSortedIndex(val: v).0)
         }
 
-        rowidx = dsts
+        rowidx = forwardDsts
         colptr = f_ind
-        backwardRowidx = srcs
+        backwardRowidx = reverseDsts
         backwardColptr = b_ind
     }
 

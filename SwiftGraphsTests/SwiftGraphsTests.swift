@@ -27,8 +27,9 @@ class SwiftGraphsTests: XCTestCase {
     
     func testDegrees() {
         XCTAssert(smallGraph.degrees == [1, 3, 2, 3, 1])
-        print(smallGraph.degrees)
-        XCTAssert(smallDiGraph.degrees == [1, 3, 2, 3, 1])
+        print(smallDiGraph.degrees)
+        print(smallDiGraph.edges)
+        XCTAssert(smallDiGraph.degrees == [1, 4, 2, 4, 1])
         
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.

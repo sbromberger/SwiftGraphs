@@ -13,10 +13,15 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
     }
 
     public init(fromEdgeList edgeList: [Edge<T>]) {
-        let orderedEdgeSet = Set(edgeList.map { $0.ordered })
-        let orderedAndReversedEdgeSet = orderedEdgeSet.union(Set(orderedEdgeList.map { $0.reverse }))
-    
-        let allEdges = (Array(orderedEdgeList + reversedEdgeList)).sorted()
+        let orderedEdgeList = edgeList.map { $0.ordered }
+        let orderedAndReversedEdgeList = (orderedEdgeList +  orderedEdgeList.map { $0.reverse }).sorted()
+        
+        var allEdges = [Edge<T>]([orderedAndReversedEdgeList[0]])
+        for newEdge in orderedAndReversedEdgeList[1...] {
+            if newEdge != allEdges.last {
+                allEdges.append(newEdge)
+            }
+        }
 
         var numVertices: T = 0
         var srcs = [T]()

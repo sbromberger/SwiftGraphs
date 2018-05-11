@@ -40,7 +40,7 @@ extension SimpleGraph {
         var edgeList = [Edge<T>]()
         edgeList.reserveCapacity(ne)
         for src in vertices {
-            for dst in neighbors(of: src) {
+            for dst in outNeighbors(of: src) {
                 edgeList.append(Edge<T>(src, dst))
             }
         }
