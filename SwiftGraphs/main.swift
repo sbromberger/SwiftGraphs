@@ -48,7 +48,7 @@ exit(0)
 // print("connected? \(ccg.isConnected)")
 //
 var start = DispatchTime.now()
-let h = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
+let h = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
 
 var end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
