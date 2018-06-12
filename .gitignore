@@ -5,3 +5,4 @@ data/
 attic/
 *.tgz
 *.xcuserstate
+project.xcworkspace/
