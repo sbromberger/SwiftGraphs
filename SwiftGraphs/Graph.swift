@@ -1,4 +1,5 @@
 import Foundation
+import Gzip
 
 public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInteger {
     let rowidx: Array<T>
@@ -50,9 +51,20 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
 
     public init(fromCSV fileName: String) {
         let furl = URL(fileURLWithPath: fileName)
+        let data = try! Data(contentsOf: furl)
+        
+        let decompressedData: Data
+        if data.isGzipped {
+            decompressedData = try! data.gunzipped()
+        } else {
+            decompressedData = data
+        }
+
         var edges = [Edge<T>]()
         do {
-            let s = try String(contentsOf: furl)
+            let s = String(decoding: decompressedData, as: UTF8.self)
+            
+//            (data: decompressedData, using: String.Encoding.utf8)
             let lines = s.split(separator: "\n")
             for line in lines {
                 let splits = line.split(separator: ",", maxSplits: 2)
@@ -66,7 +78,7 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
 
         self.init(fromEdgeList: edges)
     }
-
+    
     public init(fromVecFile fileName: String) {
         var colptrRead = [Int]()
         var rowindRead = [T]()

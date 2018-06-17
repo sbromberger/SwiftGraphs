@@ -61,6 +61,12 @@
             ReferencedContainer = "container:SwiftGraphs.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/bromberger1/dev/swift/SwiftGraphs/data/friendster-edgelist.csv"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

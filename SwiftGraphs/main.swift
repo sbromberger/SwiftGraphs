@@ -14,6 +14,13 @@ import Dispatch
 // let edge = Edge(UInt(1), UInt(2))
 // let edge2 = Edge(1, 2)
 
+let fn = CommandLine.arguments[1]
+print("opening file \(fn)")
+let gg = Graph<UInt32>(fromCSV: fn)
+print("writing file \(fn + ".bin")")
+gg.write(toBinaryFile:fn + ".bin")
+exit(0)
+
 let ms = 1_000_000.0
 extension Double {
     func truncate(places: Int) -> Double {

@@ -12,6 +12,7 @@
 		3B341906209A8F71009A187D /* radixSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B341905209A8F71009A187D /* radixSort.swift */; };
 		3B341908209AAD32009A187D /* RandomAccessCollectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B341907209AAD32009A187D /* RandomAccessCollectionExtensions.swift */; };
 		3B4257A9209A1E40008116FC /* LineReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4257A8209A1E40008116FC /* LineReader.swift */; };
+		3B4D920420D09975002E3F98 /* Gzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B0BA04C20D0983500316234 /* Gzip.framework */; };
 		3B69AC8820A3D5F100200215 /* SimpleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8720A3D5F100200215 /* SimpleGraph.swift */; };
 		3B69AC8A20A3D63600200215 /* AbstractGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8920A3D63600200215 /* AbstractGraph.swift */; };
 		3B69AC8C20A4B5E500200215 /* DiGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69AC8B20A4B5E500200215 /* DiGraph.swift */; };
@@ -32,6 +33,51 @@
 		5DFDE64E209975E400CD8CA6 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFDE64B209975E400CD8CA6 /* Graph.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		3B0BA04B20D0983500316234 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B0BA04120D0983500316234 /* Gzip.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2AE050881D4A2C070040E4C9;
+			remoteInfo = "Gzip macOS";
+		};
+		3B0BA04D20D0983500316234 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B0BA04120D0983500316234 /* Gzip.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2AE050991D4A2DC30040E4C9;
+			remoteInfo = "Gzip iOS";
+		};
+		3B0BA04F20D0983500316234 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B0BA04120D0983500316234 /* Gzip.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2A321EE71D4A6138002B0245;
+			remoteInfo = "Gzip watchOS";
+		};
+		3B0BA05120D0983500316234 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B0BA04120D0983500316234 /* Gzip.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2A321F071D4A635F002B0245;
+			remoteInfo = "Gzip tvOS";
+		};
+		3B0BA05320D0983500316234 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B0BA04120D0983500316234 /* Gzip.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2A58A7571B00F414005FBBC2;
+			remoteInfo = "Tests macOS";
+		};
+		3B0BA05520D0983500316234 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B0BA04120D0983500316234 /* Gzip.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2A58A77D1B00FBEF005FBBC2;
+			remoteInfo = "Tests iOS";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		5DFDE63E209975A500CD8CA6 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -45,6 +91,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B0BA04120D0983500316234 /* Gzip.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Gzip.xcodeproj; path = ../GzipSwift/Gzip.xcodeproj; sourceTree = "<group>"; };
 		3B32A32A20A27C3D00B446F2 /* Dijkstra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dijkstra.swift; sourceTree = "<group>"; };
 		3B32A32C20A28A9A00B446F2 /* PriorityQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityQueue.swift; sourceTree = "<group>"; };
 		3B341905209A8F71009A187D /* radixSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = radixSort.swift; sourceTree = "<group>"; };
@@ -75,12 +122,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B4D920420D09975002E3F98 /* Gzip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B0BA04220D0983500316234 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B0BA04C20D0983500316234 /* Gzip.framework */,
+				3B0BA04E20D0983500316234 /* Gzip.framework */,
+				3B0BA05020D0983500316234 /* Gzip.framework */,
+				3B0BA05220D0983500316234 /* Gzip.framework */,
+				3B0BA05420D0983500316234 /* Tests macOS.xctest */,
+				3B0BA05620D0983500316234 /* Tests iOS.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3B4D91FC20D09975002E3F98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5DEFB50B20997B2F00711BDC /* SwiftGraphsTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +164,8 @@
 				5DFDE642209975A500CD8CA6 /* SwiftGraphs */,
 				5DEFB50B20997B2F00711BDC /* SwiftGraphsTests */,
 				5DFDE641209975A500CD8CA6 /* Products */,
+				3B0BA04120D0983500316234 /* Gzip.xcodeproj */,
+				3B4D91FC20D09975002E3F98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -179,6 +249,7 @@
 					};
 					5DFDE63F209975A500CD8CA6 = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -192,6 +263,12 @@
 			mainGroup = 5DFDE637209975A500CD8CA6;
 			productRefGroup = 5DFDE641209975A500CD8CA6 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3B0BA04220D0983500316234 /* Products */;
+					ProjectRef = 3B0BA04120D0983500316234 /* Gzip.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				5DFDE63F209975A500CD8CA6 /* SwiftGraphs */,
@@ -199,6 +276,51 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3B0BA04C20D0983500316234 /* Gzip.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Gzip.framework;
+			remoteRef = 3B0BA04B20D0983500316234 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3B0BA04E20D0983500316234 /* Gzip.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Gzip.framework;
+			remoteRef = 3B0BA04D20D0983500316234 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3B0BA05020D0983500316234 /* Gzip.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Gzip.framework;
+			remoteRef = 3B0BA04F20D0983500316234 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3B0BA05220D0983500316234 /* Gzip.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Gzip.framework;
+			remoteRef = 3B0BA05120D0983500316234 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3B0BA05420D0983500316234 /* Tests macOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Tests macOS.xctest";
+			remoteRef = 3B0BA05320D0983500316234 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3B0BA05620D0983500316234 /* Tests iOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Tests iOS.xctest";
+			remoteRef = 3B0BA05520D0983500316234 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5DEFB50820997B2F00711BDC /* Resources */ = {
@@ -401,19 +523,22 @@
 		5DFDE648209975A500CD8CA6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
 		5DFDE649209975A500CD8CA6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				GCC_OPTIMIZATION_LEVEL = fast;
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-static-executable";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
