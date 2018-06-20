@@ -50,4 +50,10 @@ extension AbstractGraph {
         return core
     }
     
+    func kCore(_ k:T?, corenum:[T]?) -> [T] {
+        let useCoreNum = corenum ?? self.coreNumber()
+        let useK = k ?? (useCoreNum.max() ?? T.max)
+        return useCoreNum.filter { x in x >= useK }
+    }
+    
 }

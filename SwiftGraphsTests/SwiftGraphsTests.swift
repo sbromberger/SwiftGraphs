@@ -7,16 +7,38 @@
 //
 
 import XCTest
+import Foundation
 @testable import SwiftGraphs
 
 class SwiftGraphsTests: XCTestCase {
     var smallGraph: Graph<UInt8>!
     var smallDiGraph: DiGraph<UInt8>!
+    var largeGraph: Graph<UInt32>!
+    var coretest: Graph<UInt8>!
+
     override func setUp() {
         super.setUp()
         let edges :[Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3), Edge(3, 1)]
         smallGraph = Graph<UInt8>(fromEdgeList: edges)
         smallDiGraph = DiGraph<UInt8>(fromEdgeList: edges)
+        let largeGraphFn = FileManager.default.homeDirectoryForCurrentUser.path + "/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin"
+
+//        largeGraph = Graph<UInt32>(fromBinaryFile: largeGraphFn)
+        
+        let edgeList: [Edge<UInt8>] = [
+            Edge(0, 1),
+            Edge(0, 4),
+            Edge(0, 5),
+            Edge(1, 3),
+            Edge(1, 5),
+            Edge(2, 3),
+            Edge(2, 4),
+            Edge(3, 4),
+            Edge(3, 5),
+            Edge(4, 5)
+        ]
+        coretest = Graph<UInt8>(fromEdgeList: edgeList)
+
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
@@ -35,11 +57,16 @@ class SwiftGraphsTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
+    func testComponents() {
+        XCTAssert(coretest.coreNumber() == [3, 3, 2, 3, 3, 3])
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
 
         self.measure {
-            _ = smallGraph.BFS(from: 0)
+            _ = coretest.coreNumber()
+//            _ = largeGraph.BFS(from: 0)
             // Put the code you want to measure the time of here.
         }
     }

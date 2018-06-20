@@ -32,7 +32,7 @@ let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge
 //let g = Graph<UInt8>(fromEdgeList: edges)
 //let dg = DiGraph<UInt8>(fromEdgeList: edges)
 var start = DispatchTime.now()
-let g = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
+let g = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
 var end = DispatchTime.now()
 print("graph load took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 
