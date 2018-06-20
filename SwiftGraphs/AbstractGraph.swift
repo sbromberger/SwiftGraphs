@@ -21,6 +21,13 @@ protocol AbstractGraph {
 }
 
 extension AbstractGraph {
+    
+    public var hasSelfLoops: Bool {
+        return vertices.reduce(false, {
+            acc, v in acc || hasEdge(Edge(v,v))
+        })
+    }
+
     public var degreeHistogram: [T: Int] {
         var degHist = [T: Int]()
         for d in degrees {

@@ -71,6 +71,12 @@
             ReferencedContainer = "container:SwiftGraphs.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.txt"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

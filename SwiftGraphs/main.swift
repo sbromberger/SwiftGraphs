@@ -14,12 +14,12 @@ import Dispatch
 // let edge = Edge(UInt(1), UInt(2))
 // let edge2 = Edge(1, 2)
 
-let fn = CommandLine.arguments[1]
-print("opening file \(fn)")
-let gg = Graph<UInt32>(fromCSV: fn)
-print("writing file \(fn + ".bin")")
-gg.write(toBinaryFile:fn + ".bin")
-exit(0)
+//let fn = CommandLine.arguments[1]
+//print("opening file \(fn)")
+//let gg = Graph<UInt32>(fromVecFile: fn)
+//print("writing file \(fn + ".bin")")
+//gg.write(toBinaryFile:fn + ".bin")
+//exit(0)
 
 let ms = 1_000_000.0
 extension Double {
@@ -29,20 +29,47 @@ extension Double {
 }
 
 let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3)]
-let g = Graph<UInt8>(fromEdgeList: edges)
-let dg = DiGraph<UInt8>(fromEdgeList: edges)
-// print(g)
-print(dg)
-print("rowidx: \(dg.rowidx)")
-print("colptr: \(dg.colptr)")
-print(g.degrees)
-print(dg.degrees)
-for i in 0 ..< dg.nv {
-    print("degree of \(i) = \(dg.degree(of: i))")
-}
+//let g = Graph<UInt8>(fromEdgeList: edges)
+//let dg = DiGraph<UInt8>(fromEdgeList: edges)
+var start = DispatchTime.now()
+let g = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
+var end = DispatchTime.now()
+print("graph load took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 
-let zz = g.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
-print("dsp = \(zz)")
+// print(g)
+print(g)
+//print(g.degrees)
+
+//start = DispatchTime.now()
+//let zz = g.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
+//end = DispatchTime.now()
+//print("dsp = \(zz)")
+//print("dsp took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+
+var edgeList = (0..<100_000).map { v in Edge(v, (v+1) % 100000) }
+let coretest = Graph(fromEdgeList: edgeList)
+
+start = DispatchTime.now()
+let coreT = coretest.coreNumber()
+end = DispatchTime.now()
+//print("dsp = \(zz)")
+print("coreNumber took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+
+let edgeList2 = [
+    Edge(0, 1),
+    Edge(0, 4),
+    Edge(0, 5),
+    Edge(1, 3),
+    Edge(1, 5),
+    Edge(2, 3),
+    Edge(2, 4),
+    Edge(3, 4),
+    Edge(3, 5),
+    Edge(4, 5)
+]
+let coretest2 = Graph(fromEdgeList: edgeList2)
+print("coretest2 = \(coretest2)")
+print("coretest2.coreNumber = \(coretest2.coreNumber())")
 exit(0)
 //
 //
@@ -54,10 +81,10 @@ exit(0)
 // print(cc)
 // print("connected? \(ccg.isConnected)")
 //
-var start = DispatchTime.now()
+start = DispatchTime.now()
 let h = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
 
-var end = DispatchTime.now()
+end = DispatchTime.now()
 print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 ////
 print(h)
