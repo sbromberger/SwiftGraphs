@@ -5,5 +5,5 @@ data/
 attic/
 *.tgz
 *.xcuserstate
+xcuserdata/
 project.xcworkspace/
-*.xcodeproj
