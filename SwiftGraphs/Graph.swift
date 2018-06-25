@@ -50,53 +50,52 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
     }
 
     public init(fromCSV fileName: String) {
-        let furl = URL(fileURLWithPath: fileName)
-        let data = try! Data(contentsOf: furl)
-        
-        let decompressedData: Data
-        if data.isGzipped {
-            decompressedData = try! data.gunzipped()
-        } else {
-            decompressedData = data
+        let x = LineReader(path: fileName)
+        print("in init: \(fileName)")
+        guard let reader = x else {
+            fatalError("File not found: \(fileName)")
         }
-
         var edges = [Edge<T>]()
-        do {
-            let s = String(decoding: decompressedData, as: UTF8.self)
-            
-//            (data: decompressedData, using: String.Encoding.utf8)
-            let lines = s.split(separator: "\n")
-            for line in lines {
-                let splits = line.split(separator: ",", maxSplits: 2)
-                let src = T(Int(splits[0])!)
-                let dst = T(Int(splits[1])!)
-                edges.append(Edge(src, dst))
+        var ln = 0
+        for line in reader {
+            ln += 1
+            if (ln % 1_000_000) == 0 {
+                print(ln)
             }
-        } catch {
-            print("error processing file \(fileName): \(error)")
+            let splits = line.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ",", maxSplits: 2)
+            let src = T(Int(splits[0])!)
+            let dst = T(Int(splits[1])!)
+            edges.append(Edge(src, dst))
         }
 
         self.init(fromEdgeList: edges)
     }
     
-    public init(fromVecFile fileName: String) {
+    public init(fromVecFile fileName:String, oneIndexed:Bool = true) {
         var colptrRead = [Int]()
         var rowindRead = [T]()
         var inColPtr = true
+        let offset = oneIndexed ? -1 : 0
 
         guard let reader = LineReader(path: fileName) else {
             fatalError("error opening file \(fileName)")
         }
+        var i = 0
         for var line in reader {
+            i += 1
+            if (i % 1_000_000) == 0 {
+                print("\(i/1_000_000)m")
+            }
             line.removeLast()
             if line.hasPrefix("-----") {
+                print("new vector")
                 inColPtr = false
             } else {
                 let n = Int(line)!
                 if inColPtr {
-                    colptrRead.append(n)
+                    colptrRead.append(n + offset)
                 } else {
-                    rowindRead.append(T(n))
+                    rowindRead.append(T(n + offset))
                 }
             }
         }

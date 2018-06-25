@@ -15,8 +15,9 @@ import Dispatch
 // let edge2 = Edge(1, 2)
 
 //let fn = CommandLine.arguments[1]
+//let fn = "/Users/bromberger1/dev/swift/SwiftGraphs/data/friendster-indptrvecs.txt"
 //print("opening file \(fn)")
-//let gg = Graph<UInt32>(fromVecFile: fn)
+//let gg = Graph<UInt32>(fromVecFile: fn, oneIndexed:true)
 //print("writing file \(fn + ".bin")")
 //gg.write(toBinaryFile:fn + ".bin")
 //exit(0)
@@ -32,7 +33,7 @@ let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge
 //let g = Graph<UInt8>(fromEdgeList: edges)
 //let dg = DiGraph<UInt8>(fromEdgeList: edges)
 var start = DispatchTime.now()
-let g = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
+let g = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/friendster-indptrvecs.txt.bin")
 var end = DispatchTime.now()
 print("graph load took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 
@@ -40,11 +41,16 @@ print("graph load took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds)
 print(g)
 //print(g.degrees)
 
-//start = DispatchTime.now()
+start = DispatchTime.now()
+let yy = g.BFS(from: 1)
+print("len(yy) = \(yy.count)")
 //let zz = g.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
-//end = DispatchTime.now()
+end = DispatchTime.now()
 //print("dsp = \(zz)")
-//print("dsp took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+print("dsp took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+
+exit(0)
+
 
 var edgeList = (0..<100_000).map { v in Edge(v, (v+1) % 100000) }
 let coretest = Graph(fromEdgeList: edgeList)
