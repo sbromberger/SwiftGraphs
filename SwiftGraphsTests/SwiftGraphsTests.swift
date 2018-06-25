@@ -61,6 +61,12 @@ class SwiftGraphsTests: XCTestCase {
         XCTAssert(coretest.coreNumber() == [3, 3, 2, 3, 3, 3])
     }
     
+    func testNeighborhood() {
+        let gEdges = (0..<10).map { v in Edge<UInt8>(v, v+1) }
+        let g = Graph(fromEdgeList: gEdges)
+        XCTAssert(g.neighborhood(from: 2, depth: 4) == [1, 2, 3, 4, 5, 6])
+
+    }
     func testPerformanceExample() {
         // This is an example of a performance test case.
 

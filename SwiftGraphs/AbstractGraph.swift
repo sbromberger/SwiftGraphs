@@ -112,4 +112,26 @@ extension AbstractGraph {
         }
         return vertLevel
     }
+    
+    func neighborhood(from sourceVertex: T, depth:T) -> [T] {
+        let visited = UnsafeBitArray<Int>(repeating: false, count: Int(nv))
+        var hoodQ = Array<T>()
+        var level = 0
+        visited[Int(sourceVertex)] = true
+        hoodQ.append(sourceVertex)
+        while !hoodQ.isEmpty {
+            if level >= depth {
+                break
+            }
+            level += 1
+            let v = hoodQ.popLast()!
+            for n in neighbors(of: v) {
+                if !visited[Int(n)] {
+                    visited[Int(n)] = true
+                    hoodQ.append(n)
+                }
+            }
+        }
+        return visited.enumerated().filter { $0.element == true }.map { T($0.offset) }
+    }
 }

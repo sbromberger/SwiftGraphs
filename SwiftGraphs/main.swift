@@ -1,5 +1,5 @@
 import Dispatch
-
+import Foundation
 // func timeIt(_ fn: () -> ()) -> UInt64 {
 //    let start = DispatchTime.now()
 //    fn()
@@ -29,11 +29,12 @@ extension Double {
     }
 }
 
-let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3)]
+//let edges: [Edge<UInt8>] = [Edge(0, 1), Edge(1, 2), Edge(2, 3), Edge(3, 4), Edge(1, 3)]
 //let g = Graph<UInt8>(fromEdgeList: edges)
 //let dg = DiGraph<UInt8>(fromEdgeList: edges)
 var start = DispatchTime.now()
-let g = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/friendster-indptrvecs.txt.bin")
+//let g = Graph<UInt32>(fromBinaryFile: "/Users/bromberger1/dev/swift/SwiftGraphs/data/friendster-indptrvecs.txt.bin")
+let g = Graph<UInt32>(fromBinaryFile: FileManager.default.homeDirectoryForCurrentUser.path + "/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
 var end = DispatchTime.now()
 print("graph load took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 
@@ -41,14 +42,21 @@ print("graph load took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds)
 print(g)
 //print(g.degrees)
 
+let hEdges = (0..<10).map { v in Edge<UInt8>(v, v+1) }
+let h = Graph(fromEdgeList: hEdges)
 start = DispatchTime.now()
 let yy = g.BFS(from: 1)
 print("len(yy) = \(yy.count)")
 //let zz = g.dijkstraShortestPaths(from: 1, withPaths: true, trackVertices: true)
 end = DispatchTime.now()
 //print("dsp = \(zz)")
-print("dsp took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+print("bfs took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
 
+let y2 = h.BFS(from: 0)
+print("y2 = \(y2)")
+
+let y3 = h.neighborhood(from: 2, depth: 4)
+print("y3 = \(y3)")
 exit(0)
 
 
@@ -87,14 +95,14 @@ exit(0)
 // print(cc)
 // print("connected? \(ccg.isConnected)")
 //
-start = DispatchTime.now()
-let h = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
-
-end = DispatchTime.now()
-print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
-////
-print(h)
-print("h.foo(5) = \(h.foo(5))")
+//start = DispatchTime.now()
+//let h = Graph<UInt32>(fromBinaryFile: "/Users/seth/dev/swift/SwiftGraphs/data/indptrvecs-4m-30m.0based.bin")
+//
+//end = DispatchTime.now()
+//print("graph read took \(Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000.0) ms")
+//////
+//print(h)
+//print("h.foo(5) = \(h.foo(5))")
 // print("Degree histogram of h:")
 // start = DispatchTime.now()
 // print(h.degreeHistogram.sorted(by:<))
