@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Gzip",
+        "repositoryURL": "https://github.com/1024jp/GzipSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "377e8bff2a7c99fb5a588dec351334efa3fd0b94",
+          "version": "4.0.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
