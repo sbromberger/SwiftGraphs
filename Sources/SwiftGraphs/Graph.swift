@@ -2,9 +2,9 @@ import Foundation
 import Gzip
 
 public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInteger {
-    let rowidx: Array<T>
-    let colptr: Array<Array<T>.Index>
-    let isDirected: Bool = false
+    @usableFromInline let rowidx: Array<T>
+    @usableFromInline let colptr: Array<Array<T>.Index>
+    @usableFromInline let isDirected: Bool = false
     var eltype: Any.Type { return T.self }
 
     public var ne: Int { return rowidx.count / 2 }
@@ -71,7 +71,7 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
         self.init(fromEdgeList: edges)
     }
     
-    public init(fromVecFile fileName:String, oneIndexed:Bool = true) {
+    @inlinable public init(fromVecFile fileName:String, oneIndexed:Bool = true) {
         var colptrRead = [Int]()
         var rowindRead = [T]()
         var inColPtr = true
@@ -103,7 +103,7 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
         colptr = colptrRead
     }
 
-    public init(fromBinaryFile fileName: String) {
+    @inlinable public init(fromBinaryFile fileName: String) {
         let file = URL(fileURLWithPath: fileName)
         let fileHandle = try! FileHandle(forReadingFrom: file)
         let magic = fileHandle.readData(ofLength: 4)
@@ -126,7 +126,7 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
         })
     }
 
-    public func write(toBinaryFile fileName: String) {
+    @inlinable public func write(toBinaryFile fileName: String) {
         let file = URL(fileURLWithPath: fileName)
         // There should be a way to make FileHandle(forWritingAtPath) create the file but I don't know it
         try! Data().write(to: file)
@@ -153,18 +153,15 @@ public struct Graph<T: FixedWidthInteger>: SimpleGraph where T.Stride: SignedInt
         }
     }
 
-    public func inNeighbors(of vertex: T) -> ArraySlice<T> { return outNeighbors(of: vertex) }
-    public func neighbors(of vertex: T) -> ArraySlice<T> { return outNeighbors(of: vertex) }
+    @inlinable public func inNeighbors(of vertex: T) -> ArraySlice<T> { return outNeighbors(of: vertex) }
+    @inlinable public func neighbors(of vertex: T) -> ArraySlice<T> { return outNeighbors(of: vertex) }
 
-    public func inDegree(of vertex: T) -> Int { return outDegree(of: vertex) }
-    public func degree(of vertex: T) -> Int { return outDegree(of: vertex) }
+    @inlinable public func inDegree(of vertex: T) -> Int { return outDegree(of: vertex) }
+    @inlinable public func degree(of vertex: T) -> Int { return outDegree(of: vertex) }
 }
 
 extension Graph: CustomStringConvertible {
     public var description: String {
         return "{\(nv), \(ne)} Graph"
     }
-}
-
-extension Graph {
 }

@@ -113,7 +113,7 @@ extension AbstractGraph {
         return vertLevel
     }
     
-    public func neighborhood(from sourceVertex: T, depth:T) -> [T] {
+    public func neighborhood(from sourceVertex: T, depth: T) -> [T] {
         let visited = UnsafeBitArray<Int>(repeating: false, count: Int(nv))
         var hoodQ = Array<T>()
         var level = 0
