@@ -7,7 +7,7 @@
 //
 
 extension AbstractGraph {
-    func coreNumber() -> [T] {
+    public func coreNumber() -> [T] {
         guard !hasSelfLoops else {
             fatalError("Graph must not have self loops")
         }
@@ -50,7 +50,7 @@ extension AbstractGraph {
         return core
     }
     
-    func kCore(_ k:T?, corenum:[T]?) -> [T] {
+    public func kCore(_ k:T?, corenum:[T]?) -> [T] {
         let useCoreNum = corenum ?? self.coreNumber()
         let useK = k ?? (useCoreNum.max() ?? T.max)
         return useCoreNum.filter { x in x >= useK }

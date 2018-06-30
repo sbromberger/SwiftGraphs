@@ -30,7 +30,7 @@ extension DistVertex: Comparable {
 }
 
 extension AbstractGraph {
-    func dijkstraShortestPaths(from sourceVertex: T, distances: [[Double]]? = nil, withPaths: Bool = false, trackVertices: Bool = false) -> DijkstraState<T> {
+    public func dijkstraShortestPaths(from sourceVertex: T, distances: [[Double]]? = nil, withPaths: Bool = false, trackVertices: Bool = false) -> DijkstraState<T> {
         let numVertices = Int(nv)
         var dists = Array<Double>(repeating: Double.infinity, count: numVertices)
         var parents = Array<T>(repeating: 0, count: numVertices)
